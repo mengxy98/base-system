@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="UserMgr">
+	
+	<!-- 检查用户名是否存在 -->
+	<select id="check" resultClass="java.lang.String" parameterClass="java.lang.String">
+		select PASSWORD FROM sc_user 
+		where USER_NAME = #userName#
+	</select>
+	<!-- 查询用户 -->
+	<select id="queryUser" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT user_name, org_code, user_alias, cellphone_num, phone_num, email, start_date,
+				end_date, account_enabled, account_expired, account_locked, credentials_expired, user_id 
+		FROM sc_user
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="userName">
+				USER_NAME like '%$userName$%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 根据用户id查询用户信息 -->
+	<select id="queryUserById" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		SELECT user_name, org_code, user_alias, password, cellphone_num, phone_num, email, start_date,
+				end_date, account_enabled, account_expired, account_locked, credentials_expired
+		FROM sc_user
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="user_id">
+				USER_id = #user_id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 查询用户数量 -->
+	<select id="queryUserCount" resultClass="java.lang.Integer" parameterClass="java.util.HashMap">
+		select count(1) from sc_user
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="userName">
+				USER_NAME like '%$userName$%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!-- 添加新用户 -->
+	<insert id="insert" parameterClass="java.util.HashMap">
+		insert into  sc_user
+		(
+			USER_NAME,
+			ORG_CODE,
+			USER_ALIAS,
+			PASSWORD,
+			CELLPHONE_NUM,
+			PHONE_NUM,
+			EMAIL,
+			START_DATE,
+			END_DATE,
+			ACCOUNT_ENABLED,
+			ACCOUNT_EXPIRED,
+			ACCOUNT_LOCKED,
+			CREDENTIALS_EXPIRED
+		)
+		values
+		(
+			#user_name#,
+			#org_code#,
+			#user_alias#,
+			#password#,
+			#cellphone_num#,
+			#phone_num#,
+			#email#,
+			#start_date#,
+			#end_date#,
+			#account_enabled#,
+			#account_expired#,
+			#account_locked#,
+			#credentials_expired#
+			
+		)
+	</insert>
+	<update id="update" parameterClass="java.util.HashMap">
+		update sc_user
+		set
+			USER_NAME = #user_name#,
+			ORG_CODE = #org_code#,
+			USER_ALIAS = #user_alias#,
+			PASSWORD = #password#,
+			CELLPHONE_NUM = #cellphone_num#,
+			PHONE_NUM = #phone_num#,
+			EMAIL = #email#,
+			START_DATE = #start_date#,
+			END_DATE = #end_date#,
+			ACCOUNT_ENABLED = #account_enabled#,
+			ACCOUNT_EXPIRED = #account_expired#,
+			ACCOUNT_LOCKED = #account_locked#,
+			CREDENTIALS_EXPIRED = #credentials_expired#
+		where USER_ID = #user_id#
+	</update>
+	<delete id="destory" parameterClass="java.util.HashMap">
+		delete from sc_user
+		where USER_ID = #user_id#
+	</delete>
+</sqlMap>

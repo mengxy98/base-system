@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_user">
+	<resultMap class="com.net.security.entity.ScUser"
+		id="ScUserResultMap">
+		<result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+		<result column="USER_ALIAS" jdbcType="VARCHAR" property="userAlias" />
+		<result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+		<result column="CELLPHONE_NUM" jdbcType="VARCHAR" property="cellphoneNum" />
+		<result column="PHONE_NUM" jdbcType="VARCHAR" property="phoneNum" />
+		<result column="EMAIL" jdbcType="VARCHAR" property="email" />
+		<result column="START_DATE" jdbcType="DATE" property="start_date" />
+		<result column="END_DATE" jdbcType="DATE" property="end_date" />
+		<result column="ACCOUNT_ENABLED" jdbcType="Integer" property="accountEnabled" />
+		<result column="ACCOUNT_EXPIRED" jdbcType="Integer" property="accountExpired" />
+		<result column="ACCOUNT_LOCKED" jdbcType="Integer" property="accountLocked" />
+		<result column="CREDENTIALS_EXPIRED" jdbcType="Integer" property="credentialsExpired" />
+	
+	</resultMap>
+	
+	<select id="getByUsername" resultMap="ScUserResultMap" parameterClass="java.util.HashMap">
+		SELECT * from sc_user a
+		where USER_NAME = #userName#
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="userManagerment">
+	
+	<!-- 查询机构字典表 -->
+	<select id="findOrgDict" resultClass="java.util.HashMap">
+		SELECT 
+		a.ORG_CODE AS orgcode,
+		a.ORG_NAME AS orgname
+		FROM
+		sc_org a
+		WHERE a.ORG_CODE !='410000'
+	</select>
+	
+	<!-- 查询角色名称 -->
+	<select id="finderoleName" resultClass="java.util.HashMap">
+		SELECT 
+			a.ROLE_ID as roleId,
+			a.ROLE_NAME as roleName
+		FROM 
+			sc_role a
+	</select>
+	
+    <!--查询用户列表 -->
+	<select id="userManagermentList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+		  a.user_id,
+		  a.user_name,
+		  a.org_code,
+		  d.org_name,
+		  c.role_name,
+		  c.role_alias,
+		  a.user_alias,
+		  a.cellphone_num,
+		  a.phone_num,
+		  a.email,
+		  a.start_date,
+		  a.end_date,
+		  a.account_enabled,
+		  a.account_expired,
+		  a.account_locked,
+		  a.credentials_expired,
+		  a.remark,
+		  a.operator,
+		  DATE_FORMAT(a.createDate,'%Y-%m-%d') AS createDate,
+		  DATE_FORMAT(a.updateDate,'%Y-%m-%d') AS updateDate
+		FROM
+		  sc_user_role b 
+		LEFT JOIN  sc_user a ON a.USER_ID = b.user_id
+		LEFT JOIN  sc_role c ON b.role_id = c.ROLE_ID
+		LEFT JOIN  sc_org d ON a.org_code = d.org_code
+		where 1=1
+		<isNotEmpty prepend="and " property="orgcode">
+			a.org_code=#orgcode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and " property="user">
+			a.user_name=#user#
+		</isNotEmpty>
+		<isNotEmpty prepend="and " property="role">
+			c.role_name = #role#
+		</isNotEmpty>
+		<isNotEmpty property="order">
+			order by $order$
+		</isNotEmpty>
+		<isNotEmpty property="orderDes">
+			$orderDes$
+		</isNotEmpty>
+		
+		<isNotEmpty property="start">
+			limit #start#
+			<isNotEmpty prepend="," property="size">
+				#size#
+			</isNotEmpty>
+		</isNotEmpty>
+		
+	</select>
+	
+	<!--列表的条数 -->
+	<select id="userManagermentListCount" resultClass="int">
+		select count(1) 
+		from
+			sc_user_role b 
+		LEFT JOIN  sc_user a ON a.USER_ID = b.user_id
+		LEFT JOIN  sc_role c ON b.role_id = c.ROLE_ID
+		LEFT JOIN  sc_org d ON a.org_code = d.org_code
+		where 1=1
+		<isNotEmpty prepend="and " property="orgcode">
+			a.org_code=#orgcode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and " property="user">
+			a.user_alias=#user#
+		</isNotEmpty>
+		<isNotEmpty prepend="and " property="role">
+			c.role_alias = #role#
+		</isNotEmpty>
+	</select>
+	 
+    <!--添加用户-->
+    <insert id="addUserManagerment" parameterClass="java.util.HashMap">
+       INSERT INTO sc_user (
+		  USER_NAME,
+		  ORG_CODE,
+		  USER_ALIAS,
+		  PASSWORD,
+		  CELLPHONE_NUM,
+		  PHONE_NUM,
+		  EMAIL,
+		  START_DATE,
+		  END_DATE,
+		  ACCOUNT_ENABLED,
+		  REMARK,
+		  operator,
+		  createDate,
+		  updateDate
+		) 
+		VALUES
+		  (
+		    #userName#,
+		    #orgName#,
+		    #userAlias#,
+		    #password#,
+		    #cellPhoneNum#,
+		    #phoneNum#,
+		    #email#,
+		    #startDate#,
+		    #endDate#,
+		    '1',
+		    #remark#,
+		    #operator#,
+		    #createDate#,
+		    #updateDate#
+		  );
+    </insert>
+    <!--查找新用户插入的主键-->
+    <select id="findPrimaryKey" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+    SELECT 
+	  a.USER_ID as userId
+	FROM
+	  sc_user a
+	WHERE 1=1
+	   	<isNotEmpty prepend="and " property="userName">
+			a.USER_NAME=#userName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and " property="password">
+			a.PASSWORD=#password#
+		</isNotEmpty>
+    </select>
+   <!--往用户和角色关联的表插入相应的码值 -->
+   <insert id="addUserAndRole" parameterClass="java.util.HashMap">
+   	INSERT INTO sc_user_role (
+   		USER_ID,
+   		ROLE_ID) 
+	VALUES
+  		(
+  		#userId#,
+  		#roleId#
+  		) ;
+   </insert>
+   
+   <!-- 删除用户 -->
+	<delete id="deleteUser" parameterClass="java.lang.String">
+		DELETE 
+		FROM
+		  sc_user  
+		WHERE USER_ID = #USER_ID# 
+	</delete>
+	<!-- 删除用户和角色关联表 -->
+	<delete id="deleteUserAndRole" parameterClass="java.lang.String">
+		DELETE
+		FROM 
+			sc_user_role 
+		WHERE USER_ID = #USER_ID#
+	</delete>
+	
+	<!--修改用户 -->
+	<update id="modifyUser" parameterClass="java.util.HashMap">
+		UPDATE 
+		  sc_user 
+		SET
+		  <isNotEmpty property="updateDate">
+				updateDate = #updateDate#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="userName">
+				USER_NAME = #userName#
+		  </isNotEmpty>	
+		  <isNotEmpty prepend="," property="orgName">
+				ORG_CODE = #orgName#
+		  </isNotEmpty>	
+		  <isNotEmpty prepend="," property="userAlias">
+				USER_ALIAS = #userAlias#
+		  </isNotEmpty>	
+		  <isNotEmpty prepend="," property="password">
+				PASSWORD = #password#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="cellPhoneNum">
+				CELLPHONE_NUM = #cellPhoneNum#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="phoneNum">
+				PHONE_NUM = #phoneNum#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="email">
+				EMAIL = #email#
+		  </isNotEmpty>	
+		  <isNotEmpty prepend="," property="startDate">
+				START_DATE = #startDate#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="endDate">
+				END_DATE = #endDate#
+		  </isNotEmpty>
+		  <isNotEmpty prepend="," property="remark">
+				REMARK = #remark#
+		  </isNotEmpty>					  				  
+		WHERE 1=1
+		  <isNotEmpty prepend="and" property="userId">
+				USER_ID = #userId#
+		  </isNotEmpty>	 
+	</update>
+	<!--修改用户和角色的关系表 -->
+	<update id="modifyUserAndRole" parameterClass="java.util.HashMap">
+		UPDATE 
+		  sc_user_role 
+		SET
+		  <isNotEmpty  property="roleName">
+				ROLE_ID = #roleName#
+		  </isNotEmpty>					  				  
+		WHERE 1=1
+		  <isNotEmpty prepend="and" property="userId">
+				USER_ID = #userId#
+		  </isNotEmpty>	 
+	</update>
+	
+	<!--获取用户信息 -->
+	<select id="getUserByName" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT a.USER_NAME,a.PASSWORD,a.USER_ALIAS,a.PHONE_NUM ,a.CELLPHONE_NUM ,a.EMAIL,a.START_DATE,a.END_DATE, a.REMARK ,c.ROLE_NAME
+		FROM sc_user a 
+		JOIN sc_user_role b ON a.USER_ID = b.USER_ID
+		JOIN sc_role c ON b.ROLE_ID = c.ROLE_ID
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="userName">
+			USER_NAME = #userName#
+	    </isNotEmpty>	
+	</select>
+	
+	<!--修改用户信息 -->
+	<update id="updateUserInfo" parameterClass="java.util.HashMap">
+		UPDATE 
+		  sc_user 
+		SET
+		  <isNotEmpty  property="PHONE_NUM">
+				PHONE_NUM = #PHONE_NUM#
+		  </isNotEmpty>					  				  
+		  <isNotEmpty  prepend="," property="PHONE_NUM">
+				CELLPHONE_NUM = #CELLPHONE_NUM#
+		  </isNotEmpty>					  				  
+		  <isNotEmpty  prepend="," property="PHONE_NUM">
+				EMAIL = #EMAIL#
+		  </isNotEmpty>					  				  
+		WHERE 1=1
+		  <isNotEmpty prepend="and" property="userName">
+				USER_NAME = #userName#
+		  </isNotEmpty>	
+	</update>
+	
+	<update id="updatePwd" parameterClass="java.util.HashMap">
+		UPDATE 
+		  sc_user 
+		SET
+		  <isNotEmpty  property="newPwd">
+				PASSWORD = #newPwd#
+		  </isNotEmpty>					  				  
+		WHERE 1=1
+		  <isNotEmpty prepend="and" property="userName">
+				USER_NAME = #userName#
+		  </isNotEmpty>	
+	</update>
+	
+	<!--用于用户权限-通过用户名和密码查找用于关联的角色并查找操作类型 -->
+	<select id="findRoleAndOperaType" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT  a.USER_ID  AS userId,a.USER_NAME AS userName,a.PASSWORD as password,c.ROLE_ID AS roleId,c.ROLE_NAME AS roleName,c.AUTHORITY_TYPE AS operateType,
+				a.START_DATE AS userStartDate,a.END_DATE AS userEndDate,c.START_DATE AS roleStartDate,c.END_DATE AS roleEndDate,
+				c.DEFAULT_PAGE AS defaultPage,a.ORG_CODE AS  orgCode	
+		FROM sc_user a 
+		JOIN sc_user_role b ON a.USER_ID = b.USER_ID
+		JOIN sc_role c ON b.ROLE_ID = c.ROLE_ID
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="userName">
+			a.USER_NAME = #userName#
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="passWord">
+			a.PASSWORD = #passWord#
+	    </isNotEmpty>		
+	</select>
+	
+	<!--用于用户登录时该用户所对应的角色有没有相应的菜单 -->
+	<select id="findUserAndMenu" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		SELECT 
+		    d.MENU_ID
+		FROM
+		  	sc_user a 
+		  JOIN sc_user_role b 
+		    ON a.USER_ID = b.USER_ID 
+		  JOIN sc_role c 
+		    ON b.ROLE_ID = c.ROLE_ID 
+		  JOIN sc_role_menu d
+		    ON c.ROLE_ID = d.ROLE_ID 
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="userName">
+			a.USER_NAME = #userName#
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="passWord">
+			a.PASSWORD = #passWord#
+	    </isNotEmpty>		
+	</select>
+	
+	<!--用于用户登录时该用户所对应的角色有没有相应的菜单 -->
+	<select id="findUserRepeat" parameterClass="java.lang.String" resultClass="java.util.HashMap">
+		SELECT 
+		    a.USER_NAME AS userName
+		FROM
+		  	sc_user a 
+		WHERE 
+			a.USER_NAME = #userName#
+	</select>
+	
+</sqlMap>

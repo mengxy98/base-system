@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_engineer">
+	
+	<select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	    SELECT id,name,contractor,cdescribe,remark,createTime FROM sc_engineer
+				where 1=1
+				<isNotEmpty prepend="and" property="engineName">
+					name like '%$engineName$%'
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isEmpty property="order">
+					order by id desc
+				</isEmpty>			
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select>
+		
+	<select id="findDataListCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    SELECT count(1) FROM sc_engineer
+				where 1=1
+				<isNotEmpty prepend="and" property="engineName">
+					name like '%$engineName$%'
+				</isNotEmpty>
+	</select>
+	
+	
+	<insert id="addData" parameterClass="java.util.Map">
+	  INSERT INTO sc_engineer (
+			name,
+			contractor,
+			cdescribe,
+			remark,
+			createTime
+		)
+		VALUES
+			(
+				#name#,
+				#winContractor#,
+				#winContractorDes#,
+				#remarkContent#,
+				#createTime#
+			)
+		
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		delete from sc_engineer where id=#id#
+	</delete>
+	
+	<update id="modefyData" parameterClass="java.util.Map">
+	 update sc_engineer
+			set name=#name#,
+			contractor= #winContractor#,
+			cdescribe=#winContractorDes#,
+			remark=#remarkContent#,
+			updateTime = #updateTime#
+	where id=#id#
+	</update>
+</sqlMap>

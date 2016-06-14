@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"  
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"  
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"  
+	xmlns:mvc="http://www.springframework.org/schema/mvc"   
+	xsi:schemaLocation="  
+	http://www.springframework.org/schema/beans  
+	http://www.springframework.org/schema/beans/spring-beans.xsd  
+	http://www.springframework.org/schema/context  
+	http://www.springframework.org/schema/context/spring-context.xsd  
+	http://www.springframework.org/schema/jdbc   
+	http://www.springframework.org/schema/jdbc/spring-jdbc.xsd  
+	http://www.springframework.org/schema/tx  
+	http://www.springframework.org/schema/tx/spring-tx.xsd  
+	http://www.springframework.org/schema/mvc  
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+	http://www.springframework.org/schema/aop  
+	http://www.springframework.org/schema/aop/spring-aop.xsd"    
+	default-autowire="byName">
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<context:annotation-config />
+
+
+	<bean id="springContextBinder" class="com.net.base.core.SpringContextBinder" />
+	
+	<!-- maxUploadSize 100M = 1000000*100 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000000"/>
+	</bean>	
+	
+	
+	
+	<bean id="localResourcesInitial" class="com.net.base.core.LocalResourcesInitial"
+		init-method="initialize">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+</beans>

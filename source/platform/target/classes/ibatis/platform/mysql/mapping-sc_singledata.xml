@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_singlePtData">
+	 <select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   		select 
+	   			    t.id,
+					t.X,
+					t.Y,
+					t.Z,
+					t.times,
+					t.speed,
+					t.CMV,
+					t.RMV,
+					t.frequency,
+					t.divNum,
+					t.deviceid,
+					t.thickness,
+					t.positionId,
+					if(ISNULL(tsk.taskName),"",tsk.taskName) as taskName,
+					if(ISNULL(dev.deviceName),"",dev.deviceName) as deviceName,
+					t.taskId,
+					t.isValid,
+					t.temperature,
+					t.angle,
+					t.sensor,
+					t.imageAddress,
+					(@rownum := @rownum + 1) as rownum
+				from 
+					(select @rownum := 0 from DUAL) r,
+					sc_singlePtData t
+				    LEFT JOIN sc_device dev on dev.id=t.deviceId
+					LEFT JOIN sc_task tsk on tsk.id=t.taskId
+			    where 1=1
+				<isNotEmpty prepend="and" property="taskName">
+					tsk.taskName like '%$taskName$%'
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="deviceName">
+					dev.deviceName like '%$deviceName$%'
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isEmpty property="order">
+					order by t.id desc
+				</isEmpty>			
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select> 
+		
+	<select id="findDataListCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    	 select 
+				  count(1)
+				from 
+					sc_singlePtData t
+				    LEFT JOIN sc_device dev on dev.id=t.deviceId
+					LEFT JOIN sc_task tsk on tsk.id=t.taskId
+			    where 1=1
+				<isNotEmpty prepend="and" property="taskName">
+					tsk.taskName like '%$taskName$%'
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="deviceName">
+					dev.deviceName like '%$deviceName$%'
+				</isNotEmpty>
+	</select>
+	
+	
+	<insert id="addData" parameterClass="java.util.Map">
+	  insert into sc_singlePtData (
+	  		X,
+			Y,
+			Z,
+			times,
+			speed,
+			CMV,
+			RMV,
+			frequency,
+			divNum,
+			deviceId,
+			thickness,
+			positionId,
+			taskId,
+			temperature,
+			angle,
+			sensor,
+			imageAddress,
+			isValid
+		)
+		values
+			(
+				#X#,
+				#Y#,
+				#Z#,
+				#times#,
+				#speed#,
+				#CMV#,
+				#RMV#,
+				#frequency#,
+				#divNum#,
+				#deviceId#,
+				#thickness#,
+				#positionId#,
+				#taskId#,
+				#temperature#,
+				#angle#,
+				#sensor#,
+				#imageAddress#,
+				#isValid#
+			)
+		
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		delete from sc_singlePtData where id=#id#
+	</delete>
+	
+	<update id="modefyData" parameterClass="java.util.Map">
+	 update sc_singlePtData
+	 		set divNum=#divNum#,
+	 	    taskId=#taskId#,
+			deviceId=#deviceId#,
+			positionId=#positionId#,
+			thickness=#thickness#,
+			times=#times#,
+			X=#X#,
+			Y=#Y#,
+			Z=#Z#,
+			speed=#speed#,
+			CMV=#CMV#,
+			RMV=#RMV#,
+			frequency=#frequency#,
+			temperature=#temperature#,
+			angle=#angle#,
+			sensor=#sensor#,
+			imageAddress=#imageAddress#,
+			isValid=#isValid#
+	where id=#id#
+	</update>
+</sqlMap>
+				  
+				  
+				  
+				  
+				  
+				  
+				  
+				

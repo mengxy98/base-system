@@ -1,0 +1,6 @@
+系统访问地址:
+	http://[localhost:port]/ifm/device_mgr
+前端程序模板文件：
+	app/tpl.jsp
+后台控制层统一存放在下面这个目录
+	com.neteast.ifm.web

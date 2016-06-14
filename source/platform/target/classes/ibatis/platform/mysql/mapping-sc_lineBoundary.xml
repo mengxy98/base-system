@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_lineboundary">
+	
+	<select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   			 select 
+				  t.id,
+				  t.linename,
+				  sg.sName,
+				  if(ISNULL(pt.linename),"",pt.linename) as parentLineName,
+				  if(ISNULL(lsn.linename),"",lsn.linename) as lineDesignName,
+				  t.mLineX,
+				  t.mLineY,
+				  t.mLineZ,
+				  t.radius,
+				  t.longitude,
+				  t.latitude,
+				  t.elevation,
+				  sdc.name as lineType,
+				  t.stNum,
+				  t.createTime,
+				  (@rownum := @rownum + 1) as rownum
+				from 
+					(select @rownum := 0 from DUAL) r,
+					sc_lineboundary t
+					left join sc_lineboundary pt on t.parentId=pt.id
+					left join sc_segment sg on t.sid=sg.sid
+					left join sc_linedesign lsn on lsn.id=t.lid
+					left join 
+  					(select sd.* from sc_dic sd
+					join sc_dic_type sdt on sd.typeId=sdt.id WHERE sdt.type='lineType') sdc on sdc.id=t.lineType
+			    where 1=1
+				<isNotEmpty prepend="and" property="linename">
+					t.linename like '%$linename$%'
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isEmpty property="order">
+					order by t.id desc
+				</isEmpty>			
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select>
+		
+	<select id="getLineList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   			 select 
+				  t.id,
+				  t.linename
+				from 	
+					sc_lineboundary t					
+					order by t.id desc
+	</select>
+		
+	<select id="findDataListCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    	 select 
+				  count(1)
+				from 
+					sc_lineboundary t			
+			    where 1=1
+				<isNotEmpty prepend="and" property="linename">
+					t.linename like '%$linename$%'
+				</isNotEmpty>
+	</select>
+	
+	
+	<insert id="addData" parameterClass="java.util.Map">
+	  insert into sc_lineboundary (
+			  linename,
+			  sid,
+			  lid,
+			  parentId,
+			  mLineX,
+			  mLineY,
+			  mLineZ,
+			  radius,
+			  longitude,
+			  latitude,
+			  elevation,
+			  lineType,
+			  stNum,
+			  createTime
+		)
+		values
+			(
+				#linename#,
+				#sid#,
+				#lid#,
+				#parentId#,
+				#mLineX#,
+				#mLineY#,
+				#mLineZ#,
+				#radius#,
+				#longitude#,
+				#latitude#,
+				#elevation#,
+				#lineType#,
+				#stNum#,
+				#createTime#
+			)
+		
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		delete from sc_lineboundary where id=#id#
+	</delete>
+	
+	<update id="modefyData" parameterClass="java.util.Map">
+	 update sc_lineboundary
+	 			set sid=#sid#,
+	 			   lid=#lid#,
+				  linename=#linename#,
+				  parentId=#parentId#,
+				  mLineX=#mLineX#,
+				  mLineY=#mLineY#,
+				  mLineZ=#mLineZ#,
+				  radius=#radius#,
+				  longitude=#longitude#,
+				  latitude=#latitude#,
+				  elevation=#elevation#,
+				  lineType=#lineType#,
+				  stNum=#stNum#
+	where id=#id#
+	</update>
+</sqlMap>
+				  
+				  
+				  
+				  
+				  
+				  
+				  
+				

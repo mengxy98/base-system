@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+ <!-- 增加一个filter，这点与Acegi是不一样的，不能修改默认的filter了，这个filter位于FILTER_SECURITY_INTERCEPTOR之前 -->
+   <!-- 当访问被拒绝时，会转到403.jsp --> 
+
+<http pattern="/login.jsp" security="none"/>
+<http   access-denied-page="/error_404.jsp" entry-point-ref="authenticationProcessingFilterEntryPoint"><!-- 指定被拒绝页面 -->
+  <!--   <intercept-url pattern="/login.jsp"  filters="none" /> -->
+    <!-- <intercept-url pattern="/index.jsp" access="ROLE_MANAGER,ROLE_NOMAL"/> -->
+
+    
+      
+      <!-- id登陆唯一. 后登陆的账号会挤掉第一次登陆的账号  
+         error-if-maximum-exceeded="true" 禁止2次登陆;   
+        session-fixation-protection="none" 防止伪造sessionid攻击. 
+         用户登录成功后会销毁用户当前的session.  
+         创建新的session,并把用户信息复制到新session中. 
+    
+     <session-management  session-fixation-protection="none">
+        <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/login.jsp"/> 
+     </session-management> 
+    -->  
+   <form-login login-page="/login.jsp"
+               authentication-failure-url="/login.jsp?error=true"
+               default-target-url="/main/main.jsp"
+               always-use-default-target="true"  
+               login-processing-url="/login.jsp"
+            
+    /><!--  always-use-default-target任何url都要经过default-target-url指定的页面 -->
+   <!--  <logout logout-success-url="/login.jsp"/> --><!-- 指定登出的页面 -->
+    <http-basic/>
+    
+     <!-- <remember-me data-source-ref="dataSource" /> -->
+     
+     <remember-me />
+     <!--  <logout invalidate-session="true" logout-success-url="/login.jsp" logout-url="/j_spring_security_logout"/> -->
+      <custom-filter position="LOGOUT_FILTER"  ref="customLogoutFilter" />
+      
+      <custom-filter  before="FILTER_SECURITY_INTERCEPTOR" ref="myFilter"/>
+
+</http>
+<!--  
+<http auto-config="true"/>  -->
+
+  <!-- 一个自定义的filter，必须包含authenticationManager,accessDecisionManager,securityMetadataSource三个属性，
+    我们的所有控制将在这三个类中实现，解释详见具体配置 -->
+    <beans:bean id="myFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="authenticationManager"  ref="authenticationManager" />
+    <!--     <beans:property name="accessDecisionManager"  ref="myAccessDecisionManagerBean" />
+        <beans:property name="securityMetadataSource" ref="securityMetadataSource" /> -->
+         <beans:property name="authenticationSuccessHandler" ref="successHandler">
+         </beans:property>
+         <beans:property name="authenticationFailureHandler" ref="failureHandler"/>
+    </beans:bean>
+    
+    
+    <!-- 认证管理器，实现用户认证的入口，主要实现UserDetailsService接口即可 -->
+     <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="myUserDetailService">
+           <!--   如果用户的密码采用加密的话，可以加点“盐”
+                <password-encoder hash="md5" />
+            -->
+        </authentication-provider>
+    </authentication-manager>
+    
+    
+     <beans:bean id="failureHandler" class="com.net.security.AjaxAuthenticationFailureHandler" />  
+   
+      
+    <beans:bean id="successHandler" class="com.net.security.AjaxAuthenticationSuccessHandler">
+       <beans:property name="redirectURL" value="/main/main.jsp" />
+    </beans:bean> 
+     
+      
+    <beans:bean id="myUserDetailService" class="com.net.security.MyUserDetailService" />
+  
+    <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源 -->
+  <!--   <beans:bean id="myAccessDecisionManagerBean" class="com.net.security.MyAccessDecisionManager" />
+  -->
+    
+ 	<!-- <beans:bean id="basicDao" class="com.net.base.dao.BasicDao" /> -->
+    <!-- 资源源数据定义，即定义某一资源可以被哪些角色访问 -->
+   <!--  <beans:bean id="securityMetadataSource" class="com.net.security.MyInvocationSecurityMetadataSource" >
+    	
+    </beans:bean> -->
+    
+   <beans:bean id="customLogoutFilter" class="com.net.security.CustomLogoutFilter">
+         <!-- 处理退出的虚拟url -->
+         <beans:property name="filterProcessesUrl" value="/j_spring_security_logout" />
+         <!-- 退出处理成功后的默认显示url -->
+         <beans:constructor-arg index="0" value="/login.jsp" />
+         <beans:constructor-arg index="1">
+            <!-- 退出成功后的handler列表 -->
+             <beans:array>
+                 <beans:bean id="securityContextLogoutHandler"
+                     class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+                 <!-- 加入了开发人员自定义的退出成功处理 -->
+                 <beans:bean id="customLogoutSuccessHandler" class="com.net.security.CustomLogoutHandler" />
+             </beans:array>
+         </beans:constructor-arg>
+     </beans:bean>
+    
+  <beans:bean id="authenticationProcessingFilterEntryPoint" class="com.net.security.AjaxAwareLoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login.jsp"></beans:property>
+  </beans:bean>
+</beans:beans>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="  
+	http://www.springframework.org/schema/beans  
+	http://www.springframework.org/schema/beans/spring-beans.xsd  
+	http://www.springframework.org/schema/context  
+	http://www.springframework.org/schema/context/spring-context.xsd  
+	http://www.springframework.org/schema/jdbc   
+	http://www.springframework.org/schema/jdbc/spring-jdbc.xsd  
+	http://www.springframework.org/schema/tx  
+	http://www.springframework.org/schema/tx/spring-tx.xsd  
+	http://www.springframework.org/schema/mvc  
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+	http://www.springframework.org/schema/aop  
+	http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-autowire="byName">
+ <!-- default-lazy-init="false"必须是false -->
+ <!-- 定义受环境影响易变的变量 -->
+
+    <bean id="memcachedPool" class="com.whalin.MemCached.SockIOPool"
+        factory-method="getInstance" init-method="initialize" destroy-method="shutDown">
+ 
+        <constructor-arg>
+            <value>memCachedPool</value>
+        </constructor-arg>
+ 
+        <property name="servers">
+            <list>
+              <!--   <value>${memcache.server}</value>  -->
+               <value>127.0.0.1:11211</value>
+            </list>
+        </property>
+ 
+        <property name="initConn">
+            <value>${memcache.initConn}</value>
+        </property>
+ 
+        <property name="minConn">
+            <value>${memcache.minConn}</value>
+        </property>
+ 
+        <property name="maxConn">
+            <value>${memcache.maxConn}</value>
+        </property>
+ 
+        <property name="maintSleep">
+            <value>${memcache.maintSleep}</value>
+        </property>
+ 
+        <property name="nagle">
+            <value>${memcache.nagle}</value>
+        </property>
+ 
+        <property name="socketTO">
+            <value>${memcache.socketTO}</value>
+        </property>
+    </bean>
+ 
+    <bean id="memCachedClient" class="com.whalin.MemCached.MemCachedClient">
+        <constructor-arg>
+            <value>memCachedPool</value>
+        </constructor-arg>
+    </bean> 
+     
+     
+      
+</beans>  
+     

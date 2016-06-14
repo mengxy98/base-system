@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_role">
+	<!-- 查询数据 -->
+	<select id="queryData" resultClass="java.util.HashMap">
+		SELECT
+		a.ROLE_ID,
+		a.ROLE_NAME,
+		a.ROLE_ALIAS,
+		IF (
+		a.AUTHORITY_TYPE =
+		'1',
+		'操作',
+		'查看'
+		) AS AUTHORITY_TYPE,
+		a.START_DATE,
+		a.END_DATE,
+		a.REMARK,
+		a.OPERATOR,
+		a.DEFAULT_PAGE,
+		DATE_FORMAT(a.CREATE_TIME, '%Y-%m-%d
+		%H:%m:%s') as
+		CREATE_TIME,
+		DATE_FORMAT(a.UPDATE_TIME, '%Y-%m-%d
+		%H:%m:%s') as
+		UPDATE_TIME
+		FROM
+		sc_role a
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="role">
+			a.ROLE_NAME=#role#
+		</isNotEmpty>
+		<isNotEmpty property="order">
+			order by $order$
+		</isNotEmpty>
+		<isNotEmpty property="orderDes">
+			$orderDes$
+		</isNotEmpty>
+		<isNotEmpty property="start">
+			limit #start#
+			<isNotEmpty prepend="," property="size">
+				#size#
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询数据条数 -->
+	<select id="queryDataCount" resultClass="int">
+		SELECT
+		COUNT(1)
+		FROM
+		(
+		SELECT
+		b.ROLE_ID
+		FROM
+		sc_role b
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="mechanism">
+			b.ORG_CODE=#mechanism#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="role">
+			b.ROLE_NAME=#role#
+		</isNotEmpty>
+		) c
+	</select>
+
+	<!--添加角色配置 -->
+	<insert id="addData" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_role`(
+		<isNotEmpty property="ROLE_NAME">
+			`ROLE_NAME`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ROLE_ALIAS">
+			`ROLE_ALIAS`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="AUTHORITY_TYPE">
+			`AUTHORITY_TYPE`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="START_DATE">
+			`START_DATE`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="END_DATE">
+			`END_DATE`
+		</isNotEmpty>
+		,`DEFAULT_PAGE`
+		<isNotEmpty prepend="," property="REMARK">
+			`REMARK`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="OPERATOR">
+			`OPERATOR`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="CREATE_TIME">
+			`CREATE_TIME`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="UPDATE_TIME">
+			`UPDATE_TIME`
+		</isNotEmpty>
+		)
+		VALUES
+		(
+		<isNotEmpty property="ROLE_NAME">
+			#ROLE_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ROLE_ALIAS">
+			#ROLE_ALIAS#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="AUTHORITY_TYPE">
+			$AUTHORITY_TYPE$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="START_DATE">
+			#START_DATE#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="END_DATE">
+			#END_DATE#
+		</isNotEmpty>
+		,#DEFAULT_PAGE#
+		<isNotEmpty prepend="," property="REMARK">
+			#REMARK#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="OPERATOR">
+			#OPERATOR#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="CREATE_TIME">
+			#CREATE_TIME#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="UPDATE_TIME">
+			#UPDATE_TIME#
+		</isNotEmpty>
+		) ;
+	</insert>
+
+	<!-- 查询需要修改的数据 -->
+	<select id="queryOldData" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		a.*
+		FROM
+		sc_role a
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="ROLE_ID">
+			a.ROLE_ID=$ROLE_ID$
+		</isNotEmpty>
+	</select>
+
+	<!-- 修改配置角色 -->
+	<update id="updateData" parameterClass="java.util.HashMap">
+		update sc_role a set
+		UPDATE_TIME
+		=#UPDATE_TIME#
+		<isNotEmpty prepend="," property="ROLE_NAME">
+			a.ROLE_NAME=#ROLE_NAME#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ROLE_ALIAS">
+			a.ROLE_ALIAS=#ROLE_ALIAS#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="AUTHORITY_TYPE">
+			a.AUTHORITY_TYPE=$AUTHORITY_TYPE$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="START_DATE">
+			a.START_DATE=#START_DATE#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="END_DATE">
+			a.END_DATE=#END_DATE#
+		</isNotEmpty>
+		,a.DEFAULT_PAGE=#DEFAULT_PAGE#
+		<isNotEmpty prepend="," property="REMARK">
+			a.REMARK=#REMARK#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="OPERATOR">
+			a.OPERATOR=#OPERATOR#
+		</isNotEmpty>
+		where a.ROLE_ID=$ROLE_ID$
+	</update>
+
+	<!-- 删除角色配置数据 -->
+	<delete id="delectData" parameterClass="java.lang.String">
+		delete from
+		sc_role where
+		ROLE_ID =$ROLE_ID$
+	</delete>
+
+	<!-- 删除角色配置菜单数据 -->
+	<delete id="delectDatas" parameterClass="java.lang.String">
+		delete from
+		sc_role_menu
+		where
+		ROLE_ID =$ROLE_ID$
+	</delete>
+
+	<!-- 查询菜单ID和状态 -->
+	<select id="queryMenuState" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT a.MENU_ID
+		from sc_role_menu a
+		where 1=1
+		<isNotEmpty prepend="and" property="ROLE_ID">
+			a.ROLE_ID=#ROLE_ID#
+		</isNotEmpty>
+	</select>
+
+	<!-- 查询最新添加得角色配置ID -->
+	<select id="queryRoleId" resultClass="java.util.HashMap">
+		SELECT
+		a.ROLE_ID
+		FROM
+		sc_role
+		a
+		WHERE
+		a.ROLE_ID = (
+		SELECT
+		MAX(b.ROLE_ID)
+		FROM
+		sc_role b
+		)
+	</select>
+
+	<!-- 删除角色菜单配置数据 -->
+	<delete id="deleteRoleMenu" parameterClass="java.lang.String">
+		DELETE
+		FROM
+		sc_role_menu
+		WHERE ROLE_ID=$ROLE_ID$
+	</delete>
+
+	<!-- 添加角色配置选中得数据 -->
+	<insert id="addRoleMenu" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_role_menu`(
+		<isNotEmpty property="ROLE_ID">
+			`ROLE_ID`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="menuId">
+			`MENU_ID`
+		</isNotEmpty>
+		)VALUES(
+		<isNotEmpty property="ROLE_ID">
+			$ROLE_ID$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="menuId">
+			$menuId$
+		</isNotEmpty>
+		) ;
+	</insert>
+
+	<!-- 查询默认主页 -->
+	<select id="queryDefaultPage" resultClass="java.util.HashMap">
+		SELECT
+		a.TEXT,
+		a.HREF_TARGET
+		FROM
+		sc_tree_menu a
+		WHERE
+		LEAF = 'true'
+	</select>
+
+	<!-- 判断角色是否被用户占用 -->
+	<select id="queryUser" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		a.USER_ID
+		FROM
+		sc_user_role a
+		where 1=1
+		<isNotEmpty prepend="and" property="ROLE_ID">
+			a.ROLE_ID=$ROLE_ID$
+		</isNotEmpty>
+	</select>
+
+</sqlMap>

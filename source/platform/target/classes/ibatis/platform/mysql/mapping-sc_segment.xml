@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="segmentManagerment">
+	
+	<select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	    select t1.sid,t1.sname,t1.sContractor,t1.sCDescribe,
+				(if(t1.sfid <![CDATA[<]]> 1,'',(select t2.sname from sc_segment t2 where t2.sid=t1.sfid))) as sfname,
+				t1.BeginStNum,t1.EndStNum,t1.Remark,t1.createTime
+				from sc_segment t1
+				where 1=1
+				<isNotEmpty prepend="and" property="segmentName">
+					t1.sname like '%$segmentName$%'
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select>
+		
+	<select id="findDataListCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    select count(1)
+				from sc_segment t1
+				where 1=1
+				<isNotEmpty prepend="and" property="segmentName">
+					t1.sname like '%$segmentName$%'
+				</isNotEmpty>
+	</select>
+	
+	<select id="getSegmentList" resultClass="java.util.HashMap">
+	    select t1.sid,t1.sname	
+				from sc_segment t1
+				order by t1.sid desc
+	</select>
+	
+	
+	<insert id="addData" parameterClass="java.util.Map">
+	  insert INTO sc_segment(	
+			sName,
+			sContractor,
+			sCDescribe,
+			sFid,
+			BeginStNum,
+			EndStNum,
+			Remark,
+			createTime
+       )
+		VALUES
+		(  
+			#addSegName#,
+		    #addSegContractor#,
+		    #addSegContractorDes#,
+		    #addParentSegId#,
+		    #addSegStart#,
+		    #addSegEnd#,
+		    #remarkContent#,
+		    #createTime#
+		)
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		delete from sc_segment where sid=#id#
+	</delete>
+	
+	<update id="modefyData" parameterClass="java.util.Map">
+	 update sc_segment
+			set sName=#addSegName#,
+			sContractor= #addSegContractor#,
+			sCDescribe=#addSegContractorDes#,
+			sFid=#addParentSegId#,
+			BeginStNum=#addSegStart#,
+			EndStNum=#addSegEnd#,
+			Remark=#remarkContent#,
+			updateTime = #updateTime#
+	where sid=#id#
+	</update>
+</sqlMap>

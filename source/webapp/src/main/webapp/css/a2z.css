@@ -1,0 +1,196 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	
+}
+
+/* ----------------------------------------------------a2z.a2z-css------------------------------------------------- */
+.a2z-dropdown_where {
+	position: absolute;
+	display: none;
+	width:87%;
+	font-size:0.9em;
+}
+
+.a2z-well {
+	background-color: #fbfbfb;
+	border: 1px solid #ddd;
+	box-shadow: 0 1px 1px #ececec;
+	-webkit-box-shadow: 0 1px 1px #ececec;
+	-moz-box-shadow: 0 1px 1px #ececec;
+	height: 400px;
+	width: 25%;
+	position: relative;
+	font-family: "Open Sans",Arial,Helvetica,Sans-Serif;
+	border-radius: 5px;
+}
+
+.a2z-nav {
+	display: block;
+	list-style: none;
+	position: absolute;
+	background-color: #d3d0d9;
+	height: 40px;
+	box-shadow: 0 1px 1px #666;
+	-webkit-box-shadow: 0 1px 1px #666;
+	-moz-box-shadow: 0 1px 1px #666;
+	font-size: 13px;
+	left: 2px;
+	right: 2px;
+	top: 2px;
+}
+
+.a2z-nav li {
+	float: left;
+	height: 100%;
+	width: 100px;
+	vertical-align: middle;
+	display: box;
+	display: -webkit-box;
+	display: -moz-box;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	text-align: center;
+	line-height: 40px;
+}
+
+.a2z-nav li:hover, .a2z-nav .a2z-active {
+	background-color: white;
+}
+
+.a2z-nav li a {
+	color: #000;
+	text-decoration: none;
+}
+
+.a2z-close:hover {
+	color: #2E2E2E;
+}
+
+.a2z-close {
+	position: absolute;
+	display: block;
+	right: 5px;
+	top: 5px;
+	z-index: 100;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	cursor: pointer;
+	text-align: center;
+	display: box;
+	display: -webkit-box;
+	display: -moz-box;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	border-radius: 50%;
+	background-color: #FFF;
+	font-weight: bold;
+	line-height: 21px;
+}
+
+.a2z-tab-content {
+	position: absolute;
+	top: 40px;
+	bottom: 0;
+	width: 100%;
+}
+
+.a2z-tab-panel {
+	width: 100%;
+	height: 100%;
+	position:absolute;
+	top:0;
+}
+
+.a2z-pagination {
+	position: absolute;
+	padding: 5px;
+	background-color: #d3d0d9;
+	color: #333;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	height: 30px;
+	border-top: 1px solid #666;
+	box-shadow: 0 1px 1px #666;
+	-webkit-box-shadow: 0 1px 1px #666;
+	-moz-box-shadow: 0 1px 1px #666;
+	font-size: 12px;
+	list-style: none;
+	margin-bottom:0 !important;
+}
+
+.a2z-pagination-data {
+	top: 0;
+	left: 0;
+	bottom: 30px;
+	width: 100%;
+	position: absolute;
+}
+
+.a2z-pagination-data a {
+	text-decoration: none;
+	font-size: 12px;
+	color: #000;
+	border-radius: 4px;
+	height: 25px;
+	width: auto;
+	display: inline-block;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #ececec;
+	box-shadow: 0 1px 1px #ececec;
+	-webkit-box-shadow: 0 1px 1px #ececec;
+	-moz-box-shadow: 0 1px 1px #ececec;
+	background-color: #FCFCFC;
+}
+
+.a2z-pagination-data a:hover {
+	border: 1px solid #D1EEEE;
+	box-shadow: 0 1px 1px #D1EEEE;
+	-webkit-box-shadow: 0 1px 1px #D1EEEE;
+	-moz-box-shadow: 0 1px 1px #D1EEEE;
+	background-color: #D1EEEE;
+}
+
+
+
+
+
+
+/* ----------------------------------------------pagination.a2z-css---------------------------------------------------- */
+
+
+
+.a2z-pagination .disabled,.a2z-pagination current {
+	color: #333;
+	cursor:pointer
+}
+
+.a2z-pagination li {
+	margin: 0 5px 0 5px;
+	border-radius: 5px;
+	border: 1px solid #000;
+	padding: 2px 5px 2px 5px;
+	text-decoration: none;
+	background-color: #FFF;
+	float: left;
+}
+
+.a2z-pagination li:hover {
+	background-color: #D1EEEE;
+}
+
+.a2z-pagination li a {
+	cursor: pointer;
+}
+
+.a2z-pagination li a,.a2z-pagination li a:active , .a2z-pagination li a:link,.a2z-pagination li a:visited,.a2z-pagination li a:hover {
+	color: #000;
+}

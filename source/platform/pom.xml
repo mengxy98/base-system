@@ -1,0 +1,448 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.net.base</groupId>
+		<artifactId>base-system</artifactId>
+		<version>1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>platform</artifactId>
+	<packaging>jar</packaging>
+
+	<dependencies>
+		
+		<!-- http -->
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<!-- hessian -->
+		<dependency>
+			<groupId>com.caucho</groupId>
+			<artifactId>hessian</artifactId>
+			<version>4.0.7</version>
+		</dependency>
+		<!-- apache cxf 必备jar包  begin-->
+		<dependency>
+		  <groupId>com.net-east</groupId>
+		  <artifactId>wsdl4j</artifactId>
+		  <version>1.6.2</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.net-east</groupId>
+		  <artifactId>cxf</artifactId>
+		  <version>2.4.3</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.net-east</groupId>
+		  <artifactId>neethi</artifactId>
+		  <version>3.0.1</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.net-east</groupId>
+		  <artifactId>xmlschema-core</artifactId>
+		  <version>2.0.1</version>
+		</dependency>
+		<!-- apache cxf 必备jar包  end-->
+		<dependency>
+			<groupId>com.wltea.analyzer</groupId>
+			<artifactId>IKAnalyzer</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-highlighter</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-memory</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jsp-2.1-jetty</artifactId>
+			<version>${jetty-version}</version>
+            <scope>provided</scope>
+		</dependency>
+		<dependency>
+	     <groupId>org.mortbay.jetty</groupId>
+	     <artifactId>servlet-api</artifactId>
+	     <version>3.0.pre1</version>
+	     <scope>provided</scope>
+	   </dependency>
+		<!-- tomcat默认不支持需要单独引入的包 -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- log4j 日志框架 -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+		<!-- 统一日志框架 slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
+		<!-- apache 工具包 -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<!-- spring 框架 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<!-- 对应的ibatis版本使用的是 com.ibatis,最高版本为2.1.7.597 ,必须使用对应的spring版本进行整合 -->
+			<version>1.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-dao</artifactId>
+			<version>2.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<!-- spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security-version}</version>
+		</dependency>
+		<!-- spring security support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		<!-- 数据层框架 ibatis2 -->
+		<dependency>
+			<groupId>com.ibatis</groupId>
+			<artifactId>ibatis2-sqlmap</artifactId>
+			<version>${ibatis-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibatis</groupId>
+			<artifactId>ibatis2-common</artifactId>
+			<version>${ibatis-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ibatis</groupId>
+			<artifactId>ibatis2-dao</artifactId>
+			<version>${ibatis-version}</version>
+		</dependency>
+		<!-- spring 依赖的切面框架 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.6.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.6.10</version>
+		</dependency>
+		<!-- spring代理实现 -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!-- xml 解析项目,处理xml解析 -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<!-- json 与java转换项目,前端与后端的通信层 -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+		<!-- jsonlib 转换器，项目中用于将日期进行格式化 -->
+		<dependency>
+			<groupId>net.sf.ezmorph</groupId>
+			<artifactId>ezmorph</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		<!-- mysql驱动，数据库驱动，platform -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.17</version>
+		</dependency>
+		<!--数据库脚本管理工具 - flyway -->
+		<dependency>
+			<groupId>com.googlecode.flyway</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<!-- c3po 连接池，数据库使用，platform -->
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.1.2</version>
+		</dependency>
+
+		<!-- 数据库日志记录,数据操作,platrom -->
+		<dependency>
+			<groupId>p6spy</groupId>
+			<artifactId>p6spy</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<!-- Jackson JSON Mapper -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${jackson-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.directory.studio</groupId>
+			<artifactId>org.dom4j.dom4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itextasian</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>javax.xml</artifactId>
+			<version>1.3.4.v200902170245</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.birt.runtime.3_7_1</groupId>
+			<artifactId>org.apache.xerces</artifactId>
+			<version>2.9.0.v200909240008</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.9-20121203</version>
+		</dependency>
+		<!-- webservice -->
+		
+		<!-- highcharts插件 -->
+		<dependency>
+  			<groupId>org.apache</groupId>
+ 		    <artifactId>batik-all</artifactId>
+		    <version>1.6</version>
+		</dependency>
+		<dependency>
+ 			<groupId>com.neteast</groupId>
+  			<artifactId>fop</artifactId>
+  			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>stax</groupId>
+			<artifactId>stax-api</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>2.3.0</version>
+			<type>pom</type>
+		</dependency>
+
+		<!--文件上传 -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.octo.captcha</groupId>
+		  <artifactId>jcaptcha-all</artifactId>
+		  <version>1.0-RC6</version>
+		  <exclusions>
+		    <exclusion>
+		      <groupId>quartz</groupId>
+		      <artifactId>quartz</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>commons-dbcp</groupId>
+		      <artifactId>commons-dbcp</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>commons-pool</groupId>
+		      <artifactId>commons-pool</artifactId>
+		      </exclusion>
+		    <exclusion>
+		      <groupId>hsqldb</groupId>
+		      <artifactId>hsqldb</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>net.sf.ehcache</groupId>
+		      <artifactId>ehcache</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>concurrent</groupId>
+		      <artifactId>concurrent</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>org.springframework</groupId>
+		      <artifactId>spring</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>xerces</groupId>
+		      <artifactId>xercesImpl</artifactId>
+		    </exclusion>
+		    <exclusion>
+		      <groupId>xerces</groupId>
+		      <artifactId>xmlParserAPIs</artifactId>
+		    </exclusion>
+		  </exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		
+	<dependency>
+    <groupId>com.whalin</groupId>
+    <artifactId>Memcached-Java-Client</artifactId>
+    <version>3.0.2</version>
+</dependency>
+		
+	</dependencies>
+	<build>
+		<finalName>platform</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<nonFilteredFileExtensions>
+							<nonFilteredFileExtension>xls</nonFilteredFileExtension>
+						</nonFilteredFileExtensions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<properties>
+		<spring-security-version>3.2.5.RELEASE</spring-security-version>
+	</properties>
+
+</project>

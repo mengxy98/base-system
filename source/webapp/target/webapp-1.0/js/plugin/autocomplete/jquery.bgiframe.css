@@ -1,0 +1,54 @@
+.selectItemcont {
+	padding: 18px;
+}
+
+#selectItem {
+	background: #FFF;
+	position: absolute;
+	top: 0px;
+	left: center;
+	border: 1px solid #000;
+	overflow: hidden;
+	width: 1024px;
+	z-index: 1000;
+}
+.selectItemAd{
+	padding:20px;
+}
+
+.selectItemtit {
+	line-height: 20px;
+	height: 20px;
+	margin: 1px;
+	padding: 20px;
+}
+
+.bgc_ccc {
+	background-color: #eee;
+}
+
+.selectItemleft {
+	float: left;
+	margin: 0px;
+	padding: 0px;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000;
+}
+
+.selectItemright {
+	float: right;
+	cursor: pointer;
+	color: #000;
+}
+
+.selectItemcls {
+	clear: both;
+	font-size: 0px;
+	height: 0px;
+	overflow: hidden;
+}
+
+.selectItemhidden {
+	display: none;
+}

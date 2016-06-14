@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="deviceManagerment">
+	
+	<select id="findTypeDevice" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	    select t1.id,t1.sid,t1.deviceName,t1.operator,t2.name,t1.frontDistance,
+	    	   t1.height,t1.width,t1.isShake,t1.ip,t1.remark,t1.createTime as time
+				from sc_device t1
+				join sc_dic t2 on t1.deviceType=t2.id
+				where 1=1
+				<isNotEmpty prepend="and" property="deviceType">
+					 <isNotEqual property="deviceType" compareValue="0">
+					   t1.deviceType=#deviceType#
+					</isNotEqual>
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="deviceName">
+					t1.deviceName like '%$deviceName$%'
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select>
+	
+	<select id="findDeviceList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	    select t1.id,t1.deviceName
+				from sc_device t1
+				join sc_dic t2 on t1.deviceType=t2.id
+				order by t1.id desc
+	</select>
+		
+	<select id="findTypeDeviceCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	    select  count(1)
+				from sc_device t1
+				join sc_dic t2 on t1.deviceType=t2.id
+				where 1=1
+				<isNotEmpty prepend="and" property="deviceType">
+			        <isNotEqual property="deviceType" compareValue="0">
+					   t1.deviceType=#deviceType#
+					</isNotEqual>
+				 </isNotEmpty>
+				<isNotEmpty prepend="and" property="deviceName">
+					t1.deviceName like '%$deviceName$%'
+				</isNotEmpty>
+	</select>
+	
+	<insert id="addDevice" parameterClass="java.util.Map">
+	   insert INTO sc_device(
+			sid,
+			deviceName,
+			operator,
+			deviceType,
+			frontDistance,
+			height,
+			width,
+			isShake,
+			ip,			
+			remark,
+			createTime,
+			updateTime)
+		VALUES
+		(  
+			#sid#,
+		    #deviceName#,
+		    #operator#,
+		    #deviceType#,
+		    #frontDistance#,
+		    #height#,
+		    #width#,
+		    #isShake#,
+		    #ip#,
+		    #remark#,
+		  	#createTime#,
+		    #updateTime#
+		)
+	</insert>
+	
+	<delete id="deleteDevice" parameterClass="java.lang.String">
+		delete from sc_device where id=#deviceId#
+	</delete>
+	
+	<update id="modefyDevice" parameterClass="java.util.Map">
+	 update sc_device
+			set sid = #sid#,
+			deviceName = #deviceName#,
+			operator = #operator#,
+			deviceType = #deviceType#,
+			frontDistance = #frontDistance#,
+			height = #height#,
+			width = #width#,
+			isShake = #isShake#,
+			ip = #ip#,
+			remark = #remark#,
+			updateTime = #updateTime#
+	where id=#id#
+	
+	</update>
+	
+</sqlMap>

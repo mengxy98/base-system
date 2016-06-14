@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 定时 -->
+	<bean id="sysHandleService" class="com.net.base.task.SysHandleService" />
+	
+	
+	<bean id="cronTriggerMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="sysHandleService" />
+		<property name="targetMethod" value="doPoint" />
+	</bean>
+
+
+
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref local="cronTriggerMethod" />
+		</property>
+		<property name="cronExpression">
+			<!--每10分执行一次 -->
+			<value> 0 0/10 * * * ?</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- <ref local="cronTrigger" /> -->
+			</list>
+		</property>
+		<!-- 任务调度的线程池配置 -->
+		<property name="quartzProperties">
+			<props>
+				<!-- Quartz 自带的线程池实现类是 org.quartz.smpl.SimpleThreadPool， 它能够满足大多数用户的需求。这个线程池实现具备简单的行为，并经很好的测试过。 -->
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<!-- threadCount 属性控制了多少个工作者线程被创建用来处理 Job。原则上是，要处理的 Job 越多，那么需要的工作者线程也就越多。 
+					threadCount 的数值至少为 1。Quartz 没有限定设置工作者线程的最大值，但是在多数机器上设置该值超过100的话就会显得相当不实用了，特别是在 
+					Job 执行时间较长的情况下。 -->
+				<prop key="org.quartz.threadPool.threadCount">30</prop>
+				<!-- threadPriority 属性设置工作者线程的优先级。优先级别高的线程比级别低的线程更优先得到执行。最大为10最小为1默认为5 -->
+				<prop key="org.quartz.threadPool.threadPriority">5</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

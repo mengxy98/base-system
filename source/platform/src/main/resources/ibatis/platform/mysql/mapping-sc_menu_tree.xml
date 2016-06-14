@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_menu_tree">
+	<!-- 查询菜单配置 id pid 名字 -->
+	<!-- 查询数据 -->
+	<select id="queryData" resultClass="java.util.HashMap">
+		SELECT
+		a.ID as id ,
+		a.PARENT_ID as parentID,
+		a.TEXT as text,
+		a.href_target
+		FROM
+		sc_tree_menu a
+		order by sort
+		asc
+	</select>
+
+	<!--添加菜单配置 -->
+	<insert id="addData" parameterClass="java.util.HashMap">
+		INSERT INTO `sc_tree_menu`(
+		<isNotEmpty property="PARENT_ID">
+			`PARENT_ID`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="TEXT">
+			`TEXT`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="LEAF">
+			`LEAF`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="DISABLED">
+			`DISABLED`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="HREF_TARGET">
+			`HREF_TARGET`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="VISIBILITY">
+			`VISIBILITY`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="SORT">
+			`SORT`
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="TYPE">
+			`TYPE`
+		</isNotEmpty>
+		)
+		VALUES
+		(
+		<isNotEmpty property="PARENT_ID">
+			$PARENT_ID$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="TEXT">
+			#TEXT#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="LEAF">
+			#LEAF#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="DISABLED">
+			#DISABLED#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="HREF_TARGET">
+			#HREF_TARGET#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="VISIBILITY">
+			#VISIBILITY#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="SORT">
+			$SORT$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="TYPE">
+			#TYPE#
+		</isNotEmpty>
+		) ;
+	</insert>
+
+	<!-- 查询原始数据 -->
+	<select id="queryOldData" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		SELECT
+		a.*
+		FROM
+		sc_tree_menu a
+		where 1=1
+		<isNotEmpty prepend="and" property="menuId">
+			a.id=$menuId$
+		</isNotEmpty>
+	</select>
+
+
+	<!-- 修改配置菜单 -->
+	<update id="updateData" parameterClass="java.util.HashMap">
+		update sc_tree_menu a set
+		<isNotEmpty property="TEXT">
+			a.TEXT=#TEXT#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="LEAF">
+			a.LEAF=#LEAF#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="DISABLED">
+			a.DISABLED=#DISABLED#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="HREF_TARGET">
+			a.HREF_TARGET=#HREF_TARGET#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="VISIBILITY">
+			a.VISIBILITY=#VISIBILITY#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="SORT">
+			a.SORT=$SORT$
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="TYPE">
+			a.TYPE=#TYPE#
+		</isNotEmpty>
+		where a.id=$menuId$
+	</update>
+
+	<!-- 通过菜单ID查询 角色配置表查看菜单是否被使用 -->
+	<select id="queryRoleMenu" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT a.ID
+		from sc_role_menu a
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="MENU_ID">
+			a.MENU_ID=#MENU_ID#
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 通过菜单ID查询 角色配置表查看菜单是否被使用 -->
+	<select id="queryRoleMenuName" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT a.role_id,a.menu_id,b.role_name
+		from sc_role_menu a
+		join sc_role b on a.role_id=b.role_id
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="MENU_ID">
+			a.MENU_ID=#MENU_ID#
+		</isNotEmpty>
+	</select>
+
+	<!-- 删除菜单配置 -->
+	<delete id="delectData" parameterClass="java.util.HashMap">
+		DELETE from
+		sc_tree_menu
+		WHERE id=$MENU_ID$
+	</delete>
+
+	<!-- 通过用户查找角色 -->
+	<select id="queryMenu" parameterClass="java.util.HashMap"
+		resultClass="java.util.HashMap">
+		SELECT
+		a.ID,
+		a.PARENT_ID,
+		a.TEXT,
+		a.HREF_TARGET,
+		a.LEAF,
+		a.SORT,
+		a.VISIBILITY
+		FROM
+		sc_tree_menu a
+		WHERE
+		id IN (
+		SELECT
+		b.MENU_ID
+		FROM
+		sc_role_menu b
+		WHERE
+		ROLE_ID = (
+		SELECT
+		c.ROLE_ID
+		FROM
+		sc_user_role c
+		WHERE
+		c.USER_ID = (
+		SELECT
+		d.USER_ID
+		FROM
+		sc_user d
+		WHERE 1=1
+		<isNotEmpty prepend="and" property="userName">
+			USER_NAME=#userName#
+		</isNotEmpty>
+		)
+		)
+		) and id!=4
+	</select>
+</sqlMap>

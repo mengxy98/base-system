@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_login_log">
+	
+	<!-- 插入一条登录日志 -->
+	<insert id="insert" parameterClass="java.util.Map">
+		insert into 
+			sc_login_log(method, scheme, contextPath, protocal, 
+					charactorEncoding, cookieName, cookieValue, requestURI, createDate,
+					xRealIp, remoteAddr, remoteHost, remotePort,UserAgent,attemptLoginUser,status,loginType,reason,orgCode)
+		values
+			(#method#, #scheme#, #contextPath#, #protocal#, 
+				#charactorEncoding#, #cookieName#, #cookieValue#, #requestURI#, #createDate#,
+				#xRealIp#, #remoteAddr#, #remoteHost#, #remotePort#, #User-Agent#,#attemptLoginUser#,#status#,#loginType#,#reason#,#orgCode#)
+	</insert>
+	
+	
+	<!-- 查询登录日志 -->
+	<select id="getList" parameterClass="java.util.Map"  resultClass="java.util.HashMap">
+		select 
+			method, 
+			scheme, 
+			contextPath, 
+			protocal, 
+			charactorEncoding, 
+			cookieName, 
+			cookieValue, 
+			requestURI, 
+			createDate,
+			xRealIp, 
+			remoteAddr, 
+			remoteHost, 
+			remotePort,
+			UserAgent,
+			attemptLoginUser,
+			status,
+			loginType,
+			reason
+		from
+			sc_login_log where 1 = 1
+		and createDate <![CDATA[ >= ]]> DATE_FORMAT(#startDate#,'%Y-%m-%d')
+        and createDate <![CDATA[ < ]]> DATE_ADD(STR_TO_DATE(#endDate#,'%Y%m%d'),INTERVAL 1 day)
+        <isNotEmpty prepend="and" property="orgCodes">
+		     orgCode in  ($orgCodes$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="loginUser">
+		     attemptLoginUser like '%$loginUser$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remoteAddr">
+		     remoteAddr like '%$remoteAddr$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="loginType">
+           <isNotEqual property="loginType" compareValue="all">
+		     loginType = #loginType#
+		   </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="status">
+		    <isNotEqual property="status" compareValue="all">
+		     status = #status#
+		   </isNotEqual>
+        </isNotEmpty>
+		order by createDate desc
+	</select>
+	
+	
+	<!-- 查询登录日志 -->
+	<select id="getListNum" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		select 
+			count(*)
+		from
+			sc_login_log where 1 = 1
+		and createDate <![CDATA[ >= ]]> DATE_FORMAT(#startDate#,'%Y-%m-%d')
+        and createDate <![CDATA[ < ]]> DATE_ADD(STR_TO_DATE(#endDate#,'%Y%m%d'),INTERVAL 1 day)
+        <isNotEmpty prepend="and" property="orgCodes">
+		     orgCode in  ($orgCodes$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="loginUser">
+		     attemptLoginUser like '%$loginUser$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remoteAddr">
+		     remoteAddr like '%$remoteAddr$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="loginType">
+           <isNotEqual property="loginType" compareValue="all">
+		     loginType = #loginType#
+		   </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="status">
+		    <isNotEqual property="status" compareValue="all">
+		     status = #status#
+		   </isNotEqual>
+        </isNotEmpty>
+	</select>
+	
+	
+	<!-- 查询登录日志 -->
+	<select id="getListLog" resultClass="java.util.HashMap">
+		select 
+			method, 
+			scheme, 
+			contextPath, 
+			protocal, 
+			charactorEncoding, 
+			cookieName, 
+			cookieValue, 
+			requestURI, 
+			createDate,
+			xRealIp, 
+			remoteAddr, 
+			remoteHost, 
+			remotePort,
+			UserAgent,
+			attemptLoginUser,
+			if(status=1,'是','否')as status,
+			case when loginType=1 then '退出' else '登录' end as loginType,
+			reason
+		from
+			sc_login_log where 1 = 1
+		and createDate <![CDATA[ >= ]]> DATE_FORMAT(#startDate#,'%Y-%m-%d')
+        and createDate <![CDATA[ < ]]> DATE_ADD(STR_TO_DATE(#endDate#,'%Y%m%d'),INTERVAL 1 day)
+        <isNotEmpty prepend="and" property="orgCodes">
+		     orgCode in  ($orgCodes$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="loginUser">
+		     attemptLoginUser like '%$loginUser$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="loginType">
+           <isNotEqual property="loginType" compareValue="all">
+		     loginType = #loginType#
+		   </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="status">
+		    <isNotEqual property="status" compareValue="all">
+		     status = #status#
+		   </isNotEqual>
+        </isNotEmpty>
+		order by createDate desc
+	</select>
+	
+	
+	<delete id="deleteScLoginLog" parameterClass="java.util.Map"  >
+		delete from sc_login_log where  createDate <![CDATA[ <= ]]> #saveTime#
+	</delete>
+	
+</sqlMap>

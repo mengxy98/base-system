@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_log">
+	
+	<!-- 插入一条操作日志 -->
+	<insert id="log" parameterClass="java.util.Map">
+		insert into 
+			sc_log(operation, method, scheme, contextPath, protocal, 
+					queryString, charactorEncoding, cookieName, cookieValue, requestURI, createDate,
+					xRealIp, remoteAddr, remoteHost, remotePort,UserAgent,loginUser,funcType,orgCode)
+		values
+			(#operation#, #method#, #scheme#, #contextPath#, #protocal#, 
+				#queryString#, #charactorEncoding#, #cookieName#, #cookieValue#, #requestURI#, #createDate#,
+				#xRealIp#, #remoteAddr#, #remoteHost#, #remotePort#, #User-Agent#,#loginUser#,#funcType#,#orgCode#)
+	</insert>
+	
+	
+	<!-- 查询操作日志 -->
+	<select id="getList" parameterClass="java.util.Map"  resultClass="java.util.HashMap">
+		select 
+			loginUser,
+			operation, 
+			method, 
+			scheme, 
+			contextPath, 
+			protocal, 
+			queryString, 
+			charactorEncoding, 
+			cookieName, 
+			cookieValue, 
+			requestURI, 
+			createDate,
+			xRealIp, 
+			remoteAddr, 
+			remoteHost, 
+			remotePort,
+			UserAgent,
+			funcType
+		from
+			sc_log where 1 = 1
+		and createDate <![CDATA[ >= ]]> DATE_FORMAT(#startDate#,'%Y-%m-%d')
+        and createDate <![CDATA[ < ]]> DATE_ADD(STR_TO_DATE(#endDate#,'%Y%m%d'),INTERVAL 1 day)
+        <isNotEmpty prepend="and" property="orgCodes">
+		     orgCode in  ($orgCodes$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="loginUser">
+		     loginUser like '%$loginUser$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="funcType">
+           <isNotEqual property="funcType" compareValue="all">
+		     funcType = #funcType#
+		   </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="operation">
+		     operation like '%$operation$%'
+        </isNotEmpty>
+         <isNotEmpty prepend="and" property="remoteAddr">
+		     remoteAddr like '%$remoteAddr$%'
+        </isNotEmpty>
+		order by createDate desc
+	</select>
+	
+	<!-- 查询操作日志条数 -->
+	<select id="getListNum" parameterClass="java.util.Map"  resultClass="java.lang.Integer">
+		select 
+			count(*)
+		from
+			sc_log where 1 = 1
+		and createDate <![CDATA[ >= ]]> DATE_FORMAT(#startDate#,'%Y-%m-%d')
+        and createDate <![CDATA[ < ]]> DATE_ADD(STR_TO_DATE(#endDate#,'%Y%m%d'),INTERVAL 1 day)
+        <isNotEmpty prepend="and" property="orgCodes">
+		     orgCode in  ($orgCodes$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="loginUser">
+		     loginUser like '%$loginUser$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="funcType">
+           <isNotEqual property="funcType" compareValue="all">
+		     funcType = #funcType#
+		   </isNotEqual>
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="operation">
+		     operation like '%$operation$%'
+        </isNotEmpty>
+        <isNotEmpty prepend="and" property="remoteAddr">
+		     remoteAddr like '%$remoteAddr$%'
+        </isNotEmpty>
+	</select>
+	
+	
+	<delete id="deleteScLog" parameterClass="java.util.Map"  >
+		delete from sc_log where  createDate <![CDATA[ <= ]]> #saveTime#
+	</delete>
+	
+</sqlMap>

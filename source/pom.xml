@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.net.base</groupId>
+    <artifactId>base-system</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <repositories>
+        <repository>
+            <id>bigbata.central</id>
+            <name>Central</name>
+            <url>http://42.96.175.44:8081/nexus/content/repositories/central</url>
+        </repository>
+        <repository>
+            <id>bigbata.releases</id>
+            <name>Releases</name>
+            <url>http://42.96.175.44:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <id>bigbata.thirdparty</id>
+            <name>Thirdparty</name>
+            <url>http://42.96.175.44:8081/nexus/content/repositories/thirdparty</url>
+        </repository>
+    </repositories>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                        <encoding>UTF-8</encoding>
+                        <fork>true</fork>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <configuration>
+                        <downloadSources>true</downloadSources>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>tomcat-maven-plugin</artifactId>
+                    <configuration>
+                        <url>${mojo.url}</url>
+                        <server>${mojo.server}</server>
+                        <path>${mojo.path}</path>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+	<modules>
+		<module>platform</module>
+		<module>webapp</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<spring-version>4.0.2.RELEASE</spring-version>
+		<ibatis-version>2.1.6.589</ibatis-version>
+		<jetty-version>6.1.17</jetty-version>
+        <slf4j-version>1.6.4</slf4j-version>
+		<jackson-version>1.6.4</jackson-version>
+		<log.level>info</log.level>
+	</properties>
+
+    <profiles>
+	    <profile>
+			    <id>ifm-test</id>
+			    <activation>
+				    <property>
+					    <name>envi</name>
+					    <value>test</value>
+				    </property>
+				    <activeByDefault>false</activeByDefault>
+			    </activation>
+			    <properties>
+				    <mojo.url>http://10.0.30.12:9080/manager/text</mojo.url>
+				    <mojo.server>ifm.tomcat</mojo.server>
+				    <mojo.path>/ifm</mojo.path>
+				    <!-- 默认数据源 -->
+				    <jdbc.dataSource>dataSource</jdbc.dataSource>
+				    <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+				    <jdbc.url><![CDATA[jdbc:mysql://10.0.30.14:3306/ifp?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull]]></jdbc.url>
+				    <jdbc.username>root</jdbc.username>
+				    <jdbc.password>qwertyu</jdbc.password>
+				    <log.level>info</log.level>
+			    </properties>
+	    </profile>
+         <profile>
+            <id>ifm-demo</id>
+            <activation>
+                <property>
+                    <name>envi</name>
+                    <value>demo</value>
+                </property>
+            </activation>
+            <properties>
+                <mojo.url>http://10.0.30.12:9080/manager/text</mojo.url>
+                <mojo.server>rmp.tomcat</mojo.server>
+                <mojo.path>/ifm</mojo.path>
+                <!-- 默认数据源 -->
+                <jdbc.dataSource>dataSource</jdbc.dataSource>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://10.0.30.14:3306/ifp?useUnicode%3Dtrue%26characterEncoding%3DUTF-8%26zeroDateTimeBehavior%3DconvertToNull</jdbc.url>
+                <jdbc.username>root</jdbc.username>
+                <jdbc.password>qwertyu</jdbc.password>
+                <log.level>info</log.level>
+            </properties>
+        </profile>
+   </profiles>
+
+    </project>

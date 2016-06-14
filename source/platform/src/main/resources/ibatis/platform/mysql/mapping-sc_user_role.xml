@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_user_role" >
+  <resultMap id="scUserRoleResultMap" class="com.net.security.entity.ScUserRole" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getUserRoleList" resultMap="scUserRoleResultMap" parameterClass="java.util.HashMap">
+		select 
+			ur.ID,
+			u.USER_NAME,
+			r.ROLE_NAME
+		from sc_user u 
+		join sc_user_role ur on u.USER_NAME= ur.USER_NAME 
+		join sc_role r on r.ROLE_NAME=ur.ROLE_NAME
+		where u.USER_NAME=#userName#
+  </select>
+</sqlMap>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_dic">
+	
+	<!-- 查询机构字典表 -->
+	<select id="findTypeDict" resultClass="java.util.HashMap">
+	     select t1.id,t1.name from sc_dm t1 
+			join sc_dm_type t2 on t1.typeId=t2.id
+			where 1=1
+			<isNotEmpty prepend="and " property="type">
+				t2.type in ($type$)
+			</isNotEmpty>
+			<isNotEmpty prepend="and " property="typeId">
+				t2.id in ($typeId$)
+			</isNotEmpty>
+	</select>
+	
+	
+</sqlMap>
