@@ -18,4 +18,6 @@ public interface PositionManagerDao {
 
 	List<Map<String, Object>> getPositionList();
 
+	String getPositionData(Map<String, Object> param);
+
 }

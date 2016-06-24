@@ -46,4 +46,9 @@ public class PositionManageDaoImpl implements PositionManagerDao {
 		return basicDao.queryForList("sc_positiondata.getPositionList",null);
 	}
 
+	@Override
+	public String getPositionData(Map<String, Object> map) {
+		return basicDao.queryForObject("sc_positiondata.getPositionData",map);
+	}
+
 }
