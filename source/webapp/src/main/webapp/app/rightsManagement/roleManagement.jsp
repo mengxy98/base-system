@@ -94,9 +94,9 @@ div.content_wrap {
 }
 
 div.content_wrap div.left {
-	width: 65%;
+	width: 50%;
 	height: 60%;
-	margin: 10% 17.5% 0 17.5%;
+	margin: 10% 25% 0 25%;
 	background: #fff;
 	padding-bottom: 1%;
 	overflow: auto;
@@ -239,18 +239,13 @@ ul.ztree {
 	<!-- 修改项 -->
 	<div id="proDiolagRevise"
 		style="z-index:100;display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0, 0, 0, 0.5);">
-		<div class="containerAdd1"
-			style="background: #fff; width: 65%; margin: 10% 17.5% 2% 17.5%; padding-bottom: 1%; height: 65%; overflow: auto;">
-			<div
-				style="position: fixed; top: 0; left: 0; z-index: 1000; width: 60%; margin: 10% 20%; background: #fff; border-bottom: 1px solid #ddd;">
-				<p
-					style="padding: 1% 0 0 5%; height: 2em; width: 50%; float: left; font-size: 1.3em;">修改角色信息</p>
+		<div class="containerAdd1" style="background: #fff; width: 50%; margin: 10% 25% 2% 25%; padding-bottom: 1%; height: 65%; overflow: auto;">
+			<div style="position: fixed; top: 0; left: 0; z-index: 1000; width: 50%; margin: 10% 25%; background: #fff; border-bottom: 1px solid #ddd;">
+				<p style="padding: 1% 0 0 2%; height: 2em; width: 50%; float: left; font-size: 1.3em;">修改角色信息</p>
 				<span class="glyphicon glyphicon-remove close closeRevise"
 					style="float: right; margin: 1% 1% 1% 0; cursor: pointer" id=""></span>
 			</div>
-
-			<div id="contianerDetailRevise"
-				style="width: 90%; margin: 8% auto; padding-top: 2em">
+			<div id="contianerDetailRevise" style="width: 90%; margin: 8% auto; padding-top: 2em">
 				<ul>
 					<li style="min-height: 25px; margin-bottom: 10px">
 						<p style="overflow: hidden; width: 100%;">
@@ -329,9 +324,8 @@ ul.ztree {
 				</ul>
 
 			</div>
-			<div
-				style="position: fixed; top: 78%; width: 64.95%; z-index: 1000; height: 50px; background: #fff; left: 17.5%;">
-				<div style="width: 60%; margin-top: 9px; margin-left: 20%;">
+			<div style="position: fixed; top: 83%; width: 50%; z-index: 1000; height: 50px; background: #fff; left: 25%;">
+				<div style="width: 48%; margin-top: 9px; margin-left: 25%;">
 					<p
 						style="overflow: hidden; width: 60%; text-align: center; margin-left: 20%;">
 						<button id="saveRevise" type="button" class="btn btn-primary"
@@ -348,20 +342,15 @@ ul.ztree {
 		</div>
 	</div>
 	<!-- 添加项 -->
-	<div id="proDiolagAdd"
-		style="z-index:100;display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0, 0, 0, 0.5);">
-		<div class="containerAdd1"
-			style="background: #fff; width: 65%; margin: 10% 17.5% 2% 17.5%; padding-bottom: 1%; height: 65%; overflow: auto;">
-			<div
-				style="position: fixed; top: 0; left: 0; z-index: 1000; width: 60%; margin: 10% 20%; background: #fff; border-bottom: 1px solid #ddd;">
-				<p
-					style="padding: 1% 0 0 5%; height: 2em; width: 50%; float: left; font-size: 1.3em;">添加角色信息</p>
+	<div id="proDiolagAdd" style="z-index:100;display: none; position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: rgba(0, 0, 0, 0.5);">
+		<div class="containerAdd1" style="background: #fff; width: 50%; margin: 10% 25% 2% 25%; padding-bottom: 1%; height: 65%; overflow: auto;">
+			<div style="position: fixed; top: 0; left: 0; z-index: 1000; width: 50%; margin: 10% 25%; background: #fff; border-bottom: 1px solid #ddd;">
+				<p style="padding: 1% 0 0 2%; height: 2em; width: 50%; float: left; font-size: 1.3em;">添加角色信息</p>
 				<span class="glyphicon glyphicon-remove close closeAdd "
 					style="float: right; margin: 1% 1% 1% 0; cursor: pointer" id=""></span>
 			</div>
 
-			<div id="contianerDetailAdd"
-				style="width: 90%; margin: 8% auto; padding-top: 2em">
+			<div id="contianerDetailAdd" style="width: 90%; margin: 8% auto; padding-top: 2em">
 				<ul>
 					<li style="min-height: 25px; margin-bottom: 10px">
 						<p style="overflow: hidden; width: 100%;">
@@ -441,9 +430,8 @@ ul.ztree {
 				</ul>
 
 			</div>
-			<div
-				style="position: fixed; top: 78%; width: 64.95%; height: 50px; z-index: 1000; background: #fff; left: 17.5%;">
-				<div style="width: 60%; margin-top: 9px; margin-left: 20%;">
+			<div style="position: fixed; top: 83%; width: 50%; height: 50px; z-index: 1000; background: #fff; left: 25%;">
+				<div style="width: 48%; margin-top: 9px; margin-left: 25%;">
 					<p
 						style="overflow: hidden; width: 60%; text-align: center; margin-left: 20%;">
 						<button id="saveAdd" type="button" class="btn btn-primary"
@@ -462,20 +450,16 @@ ul.ztree {
 	<!-- 角色菜单配置 -->
 	<div id="roleCont" class="content_wrap" style="display: none">
 		<div class="zTreeDemoBackground left">
-			<div
-				style="position: fixed; top: 0; left: 0; z-index: 1000; width: 60%; margin: 10% 20%; background: #fff; border-bottom: 1px solid #ddd;">
-				<p
-					style="padding: 1% 0 0 5%; height: 2em; width: 50%; float: left; font-size: 1.3em;">角色菜单配置</p>
+			<div style="position: fixed; top: 0; left: 0; z-index: 1000; width: 50%; margin: 10% 25%; background: #fff; border-bottom: 1px solid #ddd;">
+				<p style="padding: 1% 0 0 2%; height: 2em; width: 50%; float: left; font-size: 1.3em;">角色菜单配置</p>
 				<span class="glyphicon glyphicon-remove close closeRole "
 					style="float: right; margin: 1% 1% 1% 0; cursor: pointer" id=""></span>
 			</div>
 			<ul id="treeDemo" class="ztree"></ul>
 
-			<div
-				style="position: fixed; top: 78%; width: 65%; height: 50px; left: 0; background: #fff; border-top: 1px solid #ddd; margin-left: 17.5%;">
-				<div style="width: 60%; margin-top: 9px; margin-left: 20%;">
-					<p
-						style="overflow: hidden; width: 60%; text-align: center; margin-left: 20%;">
+			<div style="position: fixed; top: 83%; width:50%; height: 50px; left: 0; background: #fff; border-top: 1px solid #ddd; margin-left: 25%;">
+				<div style="width: 48%; margin-top: 9px; margin-left: 25%;">
+					<p style="overflow: hidden; width: 60%; text-align: center; margin-left: 20%;">
 						<button id="saveRole" type="button" class="btn btn-primary"
 							style="float: left">
 							<span class="glyphicon glyphicon-saved"> </span> 保存

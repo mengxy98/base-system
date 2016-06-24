@@ -36,7 +36,7 @@ public class LocalResourcesInitial extends JdbcDaoSupport implements
 
 	private void setSystemParams() {
 
-		String sql = "SELECT T2.TYPE AS paramcode, GROUP_CONCAT(CONCAT(T1.ID,':',T1.`NAME`)) AS paramvalue "
+		String sql = "SELECT T2.TYPE AS paramcode, CAST(GROUP_CONCAT(CONCAT(T1.ID,':',T1.`NAME`)) as CHAR)AS paramvalue "
 				+ " FROM SC_DIC T1  JOIN SC_DIC_TYPE T2 ON T1.TYPEID=T2.ID GROUP BY T2.TYPE";
 		
 		final Object[] params = new Object[] {};

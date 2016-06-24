@@ -70,7 +70,7 @@
                           </div>                               		        			
 		        		</div>		        			        	
 		        </article>
-		        <div id="orderCont" class="content_wrap">
+		        <div id="orderCont" class="content_wrap" style="margin-left:1%;">
 					<div class="zTreeDemoBackground left">
 						
 						<ul id="treeDemo" class="ztree" style="margin-top: 7%;"></ul>
@@ -83,9 +83,9 @@
 </div>
 <!-- 添加权限 -->	
 <div id="proDiolagAdd" style="z-index:100;display:none;position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);">
-	<div class="containerAdd" style="background:#fff;width:65%;margin:10%  17.5% 2% 17.5%;padding-bottom:1%;height:65%;overflow:auto;">
-		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:60%;margin:10%  20%;background: #fff;border-bottom:1px solid #ddd;">
-            	<p style="padding:1% 0 0 5%;height:2em;width:50%;float:left;font-size:1.3em;">添加</p>
+	<div class="containerAdd" style="background:#fff;width:50%;margin:10%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
+		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:10%  25%;background: #fff;border-bottom:1px solid #ddd;">
+            	<p style="padding:1% 0 0 2%;height:2em;width:50%;float:left;font-size:1.3em;">添加</p>
 			<span class="glyphicon glyphicon-remove close closeAdd" style="float:right;margin:1% 1% 1% 0;cursor:pointer" id=""></span>				
 		</div>
 		<form style="width:80%;margin:10% auto">
@@ -134,8 +134,8 @@
 				</li>				
 			</ul>
 								
-			<div style="position:fixed;top: 78%;width: 64.95%;z-index:1000;height:50px;background: #fff;left: 17.5%;">
-			<div style="width:60%;margin-top:9px;margin-left: 20%;">
+			<div style="position:fixed;top: 83%;width: 50%;z-index:1000;height:50px;background: #fff;left: 25%;">
+			<div style="width:48%;margin-top:9px;margin-left: 25%;">
 				<p style="overflow:hidden;width: 60%;text-align:center;margin-left: 20%;">
 				<button id="saveAdd" type="button" class="btn btn-primary"  style="float:left">
 					<span class="glyphicon glyphicon-saved"> </span>
@@ -154,9 +154,9 @@
 	
 <!-- 修改权限 -->	
 <div id="proDiolagRevise" style="z-index:100;display:none;position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);">
-	<div class="containerRevise" style="background:#fff;width:65%;margin:10%  17.5% 2% 17.5%;padding-bottom:1%;height:65%;overflow:auto;">
-		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:60%;margin:10%  20%;background: #fff;border-bottom:1px solid #ddd;">
-            	<p style="padding:1% 0 0 5%;height:2em;width:50%;float:left;font-size:1.3em;">修改</p>
+	<div class="containerRevise" style="background:#fff;width:50%;margin:10%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
+		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:10%  25%;background: #fff;border-bottom:1px solid #ddd;">
+            	<p style="padding:1% 0 0 2%;height:2em;width:50%;float:left;font-size:1.3em;">修改</p>
 			<span class="glyphicon glyphicon-remove close closeRevise" style="float:right;margin:1% 1% 1% 0;cursor:pointer" id=""></span>				
 		</div>
 		<form style="width:80%;margin:10% auto">
@@ -207,8 +207,8 @@
 				</li>				
 			</ul>
 								
-			<div style="position:fixed;top: 78%;width: 64.95%;z-index:1000;height:50px;background: #fff;left: 17.5%;">
-			<div style="width:60%;margin-top:9px;margin-left: 20%;">
+			<div style="position:fixed;top: 83%;width: 50%;z-index:1000;height:50px;background: #fff;left: 25%;">
+			<div style="width:48%;margin-top:9px;margin-left: 25%;">
 				<p style="overflow:hidden;width: 60%;text-align:center;margin-left: 20%;">
 				<button id="saveRevise" type="button" class="btn btn-primary"  style="float:left">
 					<span class="glyphicon glyphicon-saved"> </span>
