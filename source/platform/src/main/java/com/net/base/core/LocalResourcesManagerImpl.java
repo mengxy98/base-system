@@ -43,7 +43,7 @@ public class LocalResourcesManagerImpl implements LocalResourcesManager,
 	@Override
 	public Map<String, Object> getCodeInfoMapByCode(String codeType,String[] code) {
 		Map<String, Object> returnMap = new LinkedHashMap<String, Object>();
-		if (code == null || code.length == 0) return null;
+		if (code == null || code.length == 0) return returnMap;
 		Map<String,Object> map =  getCodeInfoMapByType(codeType);
 		for (int i = 0; i < code.length; i++) {
 			String valueString = (String) map.get(code[i]);

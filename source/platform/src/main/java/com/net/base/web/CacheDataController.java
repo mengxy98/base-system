@@ -2,13 +2,19 @@ package com.net.base.web;
 
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.net.base.dao.DeviceManagerDao;
 import com.net.base.service.cache.CacheDataService;
+import com.net.base.util.ListPageUtils;
 
 
 @RequestMapping(value="/cache")
@@ -18,17 +24,23 @@ public class CacheDataController {
 	@Autowired
 	private CacheDataService CacheDataService;
 	
+	@Autowired
+	DeviceManagerDao deviceManagerDao;
+	
 	@RequestMapping(value="/getDevData.do",method=RequestMethod.GET)
+	@ResponseBody
 	public String getCacheData(int Tid){
 		if (Tid < 0) return "";
 		String mess = CacheDataService.getTaskAllDeviceData(Tid);
-		if(Tid==69){
+		return mess;
+		/*if(Tid==69){
 			inputCacheData(70,"20.5,3.4,0,2016/3/30 14:34:23,RTKfixed,2.32,137.301,3219200.01709464,634607.41813379");
 		}
-		return transformData(mess);
+		return transformData(mess);*/
 	}
 	
 	@RequestMapping(value="/setDevData.do",method=RequestMethod.POST)
+	@ResponseBody
 	public boolean inputCacheData(int Did,String dataList){
 		return CacheDataService.setDevData(Did, dataList);
 	}
@@ -41,5 +53,46 @@ public class CacheDataController {
 		} catch (UnsupportedEncodingException e) {
 			return mess;
 	    }
+	}
+	
+	
+	/**
+	 * 插入数据库的接口开发
+	 */
+	/*@RequestMapping(value="/setDevData.do",method=RequestMethod.POST)
+	@ResponseBody
+	public boolean inputCacheData(int Did,String dataList){
+		return CacheDataService.setDevData(Did, dataList);
+	}*/
+	
+	
+	/**
+	 * 根据设备IP获取设备ID。	
+	 */
+	@RequestMapping(value="/getDeviceIp.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String getDeviceId(String deviceIp){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("deviceIp", deviceIp);
+		List<Map<String,Object>> list = deviceManagerDao.findDeviceManagermentListDao(map);
+		if(null != list && list.size() > 0){
+			Object objIp = list.get(0).get("ip");
+			if (objIp != null) {
+				return objIp.toString();
+			}
+		}
+		return "";
+	}
+	
+	
+	/**
+	 * 获取所有设备信息。
+	 */
+	@RequestMapping(value="/getAllDeviceInfo.do",method=RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String,Object>> getAllDeviceInfo(){
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Map<String,Object>> list = deviceManagerDao.findDeviceManagermentListDao(map);
+		return list;
 	}
 }

@@ -16,6 +16,9 @@
 				<isNotEmpty prepend="and" property="deviceName">
 					t1.deviceName like '%$deviceName$%'
 				</isNotEmpty>
+				<isNotEmpty prepend="and" property="deviceIp">
+					t1.ip = #deviceIp#
+				</isNotEmpty>
 				<isNotEmpty property="order">
 					order by $order$
 				</isNotEmpty>

@@ -83,6 +83,18 @@
 					order by t.id desc			
 	</select>
 	
+	<select id="getPositionData" parameterClass="java.util.Map" resultClass="java.lang.String">
+	   			select 
+					CONCAT_WS(',',CMV,frequency,0,satelliteTime,GPSStatus,speed,elevation,longitude,latitude) as dataList
+				from 
+					sc_positiondata t
+					where deviceId = #deviceId#
+				    order by id desc
+					limit 0,1
+					
+	</select>
+	
+	
 	<insert id="addData" parameterClass="java.util.Map">
 	  insert into sc_positiondata (
 	  		taskId,
