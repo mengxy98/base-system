@@ -32,10 +32,10 @@ public class CacheDataService {
 		try {
 			String o = baseMemcache.getCacheData(ModelType.DEVICE_MANAGER, deviceId);
 			if (null == o || o.length()<1) { //代表缓存中没有这个数据
-				Map<String, Object> param = new HashMap<String, Object>();
+				/*Map<String, Object> param = new HashMap<String, Object>();
 				param.put("deviceId", deviceId);
 				mess = positionManagerDao.getPositionData(param);
-				baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,mess);
+				baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,mess);*/
 			}else {
 				//代表缓存中存在缓存的对应数据，从缓存中获取对应数据
 				mess = o.toString();
@@ -49,7 +49,7 @@ public class CacheDataService {
 
 	public boolean setDevData(Object deviceId,String dataList){
 		try {
-			String[] column={"CMV","frequency","divNum","satelliteTime","RTKfixed","speed","elevation","longitude","latitude","taskId","X","Y","Z","direction","GPSStatus","compactId",
+			/*String[] column={"CMV","frequency","divNum","satelliteTime","RTKfixed","speed","elevation","longitude","latitude","taskId","X","Y","Z","direction","GPSStatus","compactId",
 					"RMV","F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime","isValid"};
 			Map<String, String> param = TransData.transData(dataList,column);
 			param.put("deviceId", deviceId.toString());
@@ -58,7 +58,7 @@ public class CacheDataService {
 			} catch (Exception e1) {
 				logger.error(e1.getMessage());
 				return false;
-			}
+			}*/
 			return baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,dataList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,5 +72,11 @@ public class CacheDataService {
 	public String getTaskAllDeviceData(int tid) {
 		//获取任务下的所有设备id，后循环拼接数据
 		return getDevData(tid);
+	}
+	
+	
+	public String getDeviceData(int deviceId) {
+		//获取任务下的所有设备id，后循环拼接数据
+		return getDevData(deviceId);
 	}
 }

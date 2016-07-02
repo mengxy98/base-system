@@ -29,20 +29,16 @@ public class CacheDataController {
 	
 	@RequestMapping(value="/getDevData.do",method=RequestMethod.GET)
 	@ResponseBody
-	public String getCacheData(int Tid){
-		if (Tid < 0) return "";
-		String mess = CacheDataService.getTaskAllDeviceData(Tid);
+	public String getCacheData(int deviceId){
+		if (deviceId < 0) return "";
+		String mess = CacheDataService.getDeviceData(deviceId);
 		return mess;
-		/*if(Tid==69){
-			inputCacheData(70,"20.5,3.4,0,2016/3/30 14:34:23,RTKfixed,2.32,137.301,3219200.01709464,634607.41813379");
-		}
-		return transformData(mess);*/
 	}
 	
 	@RequestMapping(value="/setDevData.do",method=RequestMethod.POST)
 	@ResponseBody
-	public boolean inputCacheData(int Did,String dataList){
-		return CacheDataService.setDevData(Did, dataList);
+	public boolean inputCacheData(int deviceId,String dataList){
+		return CacheDataService.setDevData(deviceId, dataList);
 	}
 	/**
 	 * @return 页面返回数据字符转码
