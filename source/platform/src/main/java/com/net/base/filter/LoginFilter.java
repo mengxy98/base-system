@@ -27,7 +27,7 @@ public class LoginFilter implements Filter{
 	
 	 
 	//无需过滤URL
-	private String[] filterProcessesUrl= new String[]{"login.do","captcha.do","login.jsp","index.jsp","webservice","api"};
+	private String[] filterProcessesUrl= new String[]{"login.do","captcha.do","login.jsp","index.jsp","webservice","api","setDevData.do"};
 	//无需过滤资源
 	private String  filterTypeString = "css,js,gif,png,jpg,ico";
 	

@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+    <head>
+        <title>卫星监控</title>
+        <style>
+            #panel{
+                width:650px;
+                height:600px;
+            }
+            #statusPanel{
+                width: 150px;
+                float: right;
+                height: 500px;
+                background: #5F81D6;
+                color:#FFF;
+            }
+            .status{
+                padding:7px 7px;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="position:relative;width:700px;height:500px;overflow:hidden;">
+            <div id="statusPanel">
+                <div class="status">速度：<span id="speed">0</span> km/h</div>
+                <div class="status">CMV：<span id="cmv">0</span></div>
+                <div class="status">卫星状态: <span id="sst">_</span></div>
+                <div class="status">坐标： <span id="cood"></span></div>
+                <div class="status">变数:<span id="times">0</span></div>
+                <div class="status">频率: <span id="frequency">0</span></div>
+                <div class="status">卫星时间: <span id="stime">0</span></div>
+                <div class="status">方向信息: <span id="dire">0</span></div>
+            </div>
+            <div id="panel">
+            </div>
+        </div>
+        <div>
+            <input type="button" id="start" value="开始">
+			<input type="button" id="stop" value="停止">
+            <input type="button" id="enlarge" value="放大">
+            <input type="button" id="lessen" value="缩小">
+            <input type="button" id="reset" value="重置">
+            <input type="button" id="estage" value="扩大舞台大小">
+        </div>
+        <script src="./js/satellite.js"></script>
+        <script src="../data/json/201603281329.json.js"></script>
+        <script>
+            var satellite = new Satellite({
+                panel:'#panel',
+                statusChange:function(status){
+                    document.getElementById('speed').innerHTML = status.speed;
+                    document.getElementById('cmv').innerHTML = status.CMV;
+                    document.getElementById('sst').innerHTML = status.satelliteStatus;
+                    document.getElementById('cood').innerHTML = 'x : '+status.cood.x+'<br>y : '+status.cood.y+'<br>h : '+status.cood.h;
+                    document.getElementById('times').innerHTML = status.times;
+                    document.getElementById('frequency').innerHTML = status.frequency;
+                    document.getElementById('stime').innerHTML = status.satelliteTime;
+                    if(status.direction){
+                        document.getElementById('dire').innerHTML = '北:'+status.direction.n + '<br> 南：' + status.direction.s+
+                                                                '<br>西:'+status.direction.s + '<br> 东：' + status.direction.e+
+                                                                '<br>角度: '+parseInt(status.direction.angle) + '<br> 弧度： ' +
+                                                                parseInt(status.direction.radian*1000)/1000 +
+                                                                '<br>偏离角度: '+parseInt(status.direction.offsetAngel) + '<br> 偏离弧度： '+
+                                                                parseInt(status.direction.offsetRadian*1000)/1000;
+                    }
+                }
+            });
+			
+			satellite.initData(sateData);
+
+			document.getElementById('start').onclick = function(){
+	            satellite.play();
+			}
+			
+			document.getElementById('stop').onclick = function(){
+	            satellite.stop();
+			}
+			
+			document.getElementById('enlarge').onclick = function(){
+				var scl = satellite.stageStatus.scale + 0.1;
+				satellite.scale(scl);
+				
+			}
+            
+			document.getElementById('lessen').onclick = function(){
+				var scl = satellite.stageStatus.scale * 0.9;
+				satellite.scale(scl);
+			}
+			
+			document.getElementById('reset').onclick = function(){
+				//var scl = satellite.stageStatus.scale * 0.9;
+				satellite.scale(1);
+			}
+			
+			document.getElementById('estage').onclick = function(){
+				satellite.extendStage(2);
+				
+			}
+
+
+        </script>
+    </body>
+</html>

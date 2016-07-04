@@ -91,7 +91,10 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>/js/*</url-pattern>
 	</servlet-mapping>
-	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/app/displayManagement/public/js/*</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>/app/disHtml/public/js/*</url-pattern>

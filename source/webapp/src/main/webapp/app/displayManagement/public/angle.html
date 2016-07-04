@@ -1,0 +1,58 @@
+<!doctype html>
+    <head>
+        <title>angle</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script type="text/javascript">
+        var canvas = document.getElementById('canvas');
+
+        function find_angle(p0, p1, c) {
+          var p0c = Math.sqrt(Math.pow(c.x - p0.x, 2) +
+            Math.pow(c.y - p0.y, 2)); // p0->c (b)
+          var p1c = Math.sqrt(Math.pow(c.x - p1.x, 2) +
+            Math.pow(c.y - p1.y, 2)); // p1->c (a)
+          var p0p1 = Math.sqrt(Math.pow(p1.x - p0.x, 2) +
+            Math.pow(p1.y - p0.y, 2)); // p0->p1 (c)
+          return Math.acos((p1c * p1c + p0c * p0c - p0p1 * p0p1) / (2 * p1c * p0c));
+        }
+
+        function find_angle1(p0, p1, c) {
+            return Math.atan2(p1.y - c.y, p1.x - c.x) - Math.atan2(p0.y - c.y, p0.x - c.x);
+        }
+
+        // Make sure we don't execute when canvas isn't supported
+        if (canvas.getContext) {
+
+          // use getContext to use the canvas for drawing
+          var ctx = canvas.getContext('2d');
+
+          // Draw shapes
+
+          var p0 = {
+            'x': 80,
+            'y': 50
+          };
+          var p1 = {
+            'x': 80,
+            'y': 80
+          }; // center point!
+          var p2 = {
+            'x': 50,
+            'y': 70
+          };
+          var angle = find_angle1(p0, p2, p1); // center is passed last
+          console.log(angle * (180 / Math.PI));
+
+          ctx.beginPath();
+          ctx.moveTo(p0.x, p0.y);
+          ctx.lineTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+
+        } else {
+          alert('You need Safari or Firefox 1.5+ to see this demo.');
+        }
+        </script>
+    </body>
+</html>

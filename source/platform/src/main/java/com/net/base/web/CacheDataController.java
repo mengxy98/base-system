@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.net.base.dao.DeviceManagerDao;
 import com.net.base.service.cache.CacheDataService;
-import com.net.base.util.ListPageUtils;
 
 
 @RequestMapping(value="/cache")
@@ -40,6 +39,13 @@ public class CacheDataController {
 	public boolean inputCacheData(int deviceId,String dataList){
 		return CacheDataService.setDevData(deviceId, dataList);
 	}
+	
+	@RequestMapping(value="/setDevDataEmp.do",method=RequestMethod.POST)
+	@ResponseBody
+	public boolean setDevDataEmp(int deviceId,String dataList){
+		return CacheDataService.setDevData(deviceId, dataList);
+	}
+	
 	/**
 	 * @return 页面返回数据字符转码
 	 */

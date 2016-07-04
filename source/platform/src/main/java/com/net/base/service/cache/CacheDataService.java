@@ -1,8 +1,5 @@
 package com.net.base.service.cache;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +9,6 @@ import com.net.base.dao.CacheDataDao;
 import com.net.base.dao.PositionManagerDao;
 import com.net.base.memcache.BaseMemcache;
 import com.net.base.memcache.ModelType;
-import com.net.base.util.TransData;
 
 @Service
 public class CacheDataService {
