@@ -173,8 +173,8 @@
   
 <!-- 添加项 -->	
 <div id="proDiolagAdd" style="z-index:100;display:none;position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);">
-	<div class="containerAdd1" style="background:#fff;width:50%;margin:10%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
-		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:10%  25%;background: #fff;border-bottom:1px solid #ddd;">
+	<div class="containerAdd1" style="background:#fff;width:50%;margin:7%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
+		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:7%  25%;background: #fff;border-bottom:1px solid #ddd;">
             	<p style="padding:1% 0 0 2%;height:2em;width:50%;float:left;font-size:1.3em;">添加任务信息</p>
 			<span class="glyphicon glyphicon-remove close closeAdd " style="float:right;margin:1% 1% 1% 0;cursor:pointer" id=""></span>				
 		</div>
@@ -308,7 +308,7 @@
 				</li>
 			</ul>
 		</div>
-		<div style="position:fixed;top: 83%;width: 48%;height:50px;z-index:1000;background: #fff;left: 25%;">
+		<div style="position:fixed;top: 75%;width: 48%;height:45px;z-index:1000;background: #fff;left: 25%;">
 			<div style="width:60%;margin-top:9px;margin-left: 20%;">
 				<p style="overflow:hidden;width: 60%;text-align:center;margin-left: 20%;">
 				<button id="saveAdd" type="button" class="btn btn-primary"  style="float:left">
@@ -328,8 +328,8 @@
  
  <!-- 修改 -->
 <div id="proDiolagRevise" style="z-index:100;display:none;position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);">
-	<div class="containerAdd1" style="position:relative;background:#fff;width:50%;margin:10%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
-		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:10%  25%;background: #fff;border-bottom:1px solid #ddd;">
+	<div class="containerAdd1" style="position:relative;background:#fff;width:50%;margin:7%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
+		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:7%  25%;background: #fff;border-bottom:1px solid #ddd;">
             	<p style="padding:1% 0 0 2%;height:2em;width:50%;float:left;font-size:1.3em;">修改任务信息</p>
 			<span class="glyphicon glyphicon-remove close closeRevise" style="float:right;margin:1% 1% 1% 0;cursor:pointer" id=""></span>				
 		</div>
@@ -464,7 +464,7 @@
 			</ul>
 		
 		</div>
-		<div style="position:fixed;top: 83%;width: 48%;height:50px;left:0;z-index:1000;background: #fff;left: 25%;">
+		<div style="position:fixed;top: 75%;width: 48%;height:45px;left:0;z-index:1000;background: #fff;left: 25%;">
 			<div style="width:60%;margin-top:9px;margin-left: 20%;">
 				<p style="overflow:hidden;width: 60%;text-align:center;margin-left: 20%;">
 					<button id="saveRevise" type="button" class="btn btn-primary"  style="float:left">

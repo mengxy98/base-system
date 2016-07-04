@@ -615,7 +615,7 @@
                 CMV : curr[0] || 0,//cmv
                 frequency:curr[1] || 0,//频率
             });
-
+            
             this.draw();
 
         },
@@ -1038,7 +1038,7 @@
         },
 
         //开始播放
-        play : function(){
+        play : function(){        		
             var that = this;
             this.interval = setInterval(function () {
                 if(that.processData() === false){
