@@ -93,6 +93,7 @@ public class CacheDataService {
 					String[] data = dataList.split(";");
 					for (int i = 0; i < data.length; i++) {
 						try {
+							//定位数据
 							String[] column={"taskId","deviceId","longitude","latitude","elevation","X","Y","Z",
 									"speed","satelliteTime","direction","GPSStatus","compactId","CMV","RMV","frequency",
 									 "F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime","isValid"};
