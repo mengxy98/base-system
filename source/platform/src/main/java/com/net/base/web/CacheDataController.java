@@ -43,7 +43,7 @@ public class CacheDataController {
 	@RequestMapping(value="/setDevDataEmp.do",method=RequestMethod.POST)
 	@ResponseBody
 	public boolean setDevDataEmp(int deviceId,String dataList){
-		return CacheDataService.setDevData(deviceId, dataList);
+		return CacheDataService.setDevDataNew(deviceId, dataList);
 	}
 	
 	/**

@@ -619,7 +619,6 @@
             this.draw();
 
         },
-
         //获取填充样式
         getFillStyle:function(cmv,level){
             var color = this.configs.colorList[level];

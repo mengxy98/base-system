@@ -41,7 +41,7 @@
             <input type="button" id="reset" value="重置">
             <input type="button" id="estage" value="扩大舞台大小">
             <input type="button" onclick="testData()" value="初始化测试数据">
-            <input type="button" id="testDat" value="***********">
+            <input type="button" id="testDat" value="***">
         </div>
         <div style="position:relative;width:100%;height:100%;overflow:hidden;">
             <div id="statusPanel">
@@ -58,7 +58,7 @@
             </div>
         </div>
        
-        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/satellite.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/satelliteNew.js"></script>
          <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/data.js"></script>
         <script>
             var satellite = new Satellite({
@@ -84,12 +84,14 @@
 			
 			document.getElementById('start').onclick = function(){
 				getData();
+				flag = true;
 				//satellite.play();
 			}
 			
 			document.getElementById('stop').onclick = function(){
 				clearInterval(getinterval);
    			    drawFlag=false;
+   			 	satellite.satelliteData=[];
 			}
 			
 			document.getElementById('enlarge').onclick = function(){
@@ -135,10 +137,10 @@
 				            		 //解析data成需要的数组
 				            	     var allData = data.split(";");
 				            		 for(var i=0;i<allData.length;i++){
-				            			 satellite.pushData(allData[i].split(","));
-				            			//var empArray=allData[i].split(",");
-				            			//var arrayData=new Array(empArray[13],empArray[15],0,empArray[9],empArray[11],empArray[8],empArray[4],empArray[3]);
-				            			//satellite.pushData(empArray);//新格式数据
+				            			// satellite.pushData(allData[i].split(","));
+				            			var empArray=allData[i].split(",");
+				            			var arrayData=new Array(empArray[13],empArray[15],0,empArray[9],empArray[11],empArray[8],empArray[4],empArray[6],empArray[5]);
+				            			satellite.pushData(arrayData);//新格式数据
 				            		 }
 						             if(flag){
 						            	 satellite.play();
@@ -150,9 +152,9 @@
 			            	 alert("系统错误，请稍后再试!");
 			             }
 		            });
-				 },500);  
+				 },500);    
 				// satellite.pushDatas(sate);satellite.play();
-        		/* for(var i=0;i<sate.length/10;i++){
+        		/*for(var i=0;i<sate.length;i++){
         			var arrayData=new Array();
         			arrayData[0]=sate[i][13];
         			arrayData[1]=sate[i][15];
@@ -161,16 +163,16 @@
         			arrayData[4]=sate[i][11];
         			arrayData[5]=sate[i][8];
         			arrayData[6]=sate[i][4];
-        			arrayData[7]=sate[i][3];
-        			arrayData[8]=sate[i][2];
+        			arrayData[7]=sate[i][6];
+        			arrayData[8]=sate[i][5];
         			satellite.pushData(arrayData);//新格式数据
         		 }
-        		 satellite.play();  */
+        		 satellite.play();  */  
 			}
 			function testData(){
 			    var i = 0;
 				var setinterval = setInterval(function () {
-					 if(i>=(sate.length/5)){
+					 if(i>=(sate.length)){
 						  clearInterval(setinterval);
 						  setTimeout(function(){
 							  $.ajax({
@@ -184,7 +186,7 @@
 						            	 alert("系统错误，请稍后再试!");
 						             }
 					            });
-						  },2000);
+						  },1000);
 					  }
 					  //模拟5条数据
 					  var emp = sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",");
