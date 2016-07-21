@@ -45,6 +45,18 @@ public class DeviceManagerDaoImpl implements DeviceManagerDao{
 	public List<Map<String, Object>> findDeviceList() {
 		return basicDao.queryForList("deviceManagerment.findDeviceList",null);
 	}
+
+	@Override
+	public List<Map<String, Object>> findTypeDeviceByIp(Map<String, Object> map) {
+		return basicDao.queryForList("deviceManagerment.findTypeDeviceByIp",map);
+	}
+
+	@Override
+	public List<Map<String, Object>> findTaskInfoByIp(Map<String, Object> map) {
+		return basicDao.queryForList("deviceManagerment.findTaskInfoByIp",map);
+	}
+	
+	
 	
 	
 }

@@ -25,4 +25,9 @@ public interface DeviceManagerDao {
 	void modefyDeviceManagermentDao(Map<String, String> param);
 
 	List<Map<String, Object>> findDeviceList();
+	
+	List<Map<String, Object>> findTypeDeviceByIp(Map<String, Object> map);
+
+	List<Map<String, Object>> findTaskInfoByIp(Map<String, Object> map);
+	
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,19 +91,23 @@ public class CacheDataController {
 	
 	
 	/**
-	 * 根据设备IP获取设备ID。	
+	 * 方法说明:根据设备ip获取设备信息
+	 * @param deviceIp
+	 * @return
+	 * Date: 2016年7月21日下午6:18:44
+	 * @author mengxy
+	 * @version 1.0
+	 * @since:
 	 */
-	@RequestMapping(value="/getDeviceIP.do",method=RequestMethod.POST)
+	@RequestMapping(value="/getDeviceIP.do",method=RequestMethod.GET)
 	@ResponseBody
 	public String getDeviceId(String deviceIp){
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("deviceIp", deviceIp);
-		List<Map<String,Object>> list = deviceManagerDao.findDeviceManagermentListDao(map);
+		List<Map<String,Object>> list = deviceManagerDao.findTypeDeviceByIp(map);
 		if(null != list && list.size() > 0){
-			Object objId = list.get(0).get("id");
-			if (objId != null) {
-				return objId.toString();
-			}
+			JSONArray objArray = JSONArray.fromObject(list);
+			return objArray.toString();
 		}
 		return "";
 	}
@@ -124,8 +130,15 @@ public class CacheDataController {
 	 */
 	@RequestMapping(value="/getTaskInfo.do",method=RequestMethod.GET)
 	@ResponseBody
-	public String getTaskInfo(String deviceIP){
-		if(deviceIP==null || deviceIP.length()==0)return "";
+	public String getTaskInfo(String deviceIp){
+		if(deviceIp==null || deviceIp.length()==0)return "";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("deviceIp", deviceIp);
+		List<Map<String,Object>> list = deviceManagerDao.findTaskInfoByIp(map);
+		if(null != list && list.size() > 0){
+			JSONArray objArray = JSONArray.fromObject(list);
+			return objArray.toString();
+		}
 		return "";
 	}
 }

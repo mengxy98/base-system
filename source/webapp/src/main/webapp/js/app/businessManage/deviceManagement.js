@@ -361,6 +361,7 @@ function saveModifyDevice(){
 	var ip = $("#modifyIp").val().trim();
 	var remark = $("#modifyRemark").val().trim();
 	var taskId = $("#modifyTask").val().trim();
+	var isShake = $("#modifyIsShake").val().trim();
 	var params = JSON.stringify([{
 		"id":modifyDeviceId,
 		"taskId":taskId,
@@ -371,7 +372,8 @@ function saveModifyDevice(){
 		"height":height,
 		"width":width,
 		"ip":ip,
-		"remark":remark
+		"remark":remark,
+		"isShake":isShake
 	}]);
    if(deviceName == ""){
 	   alert("设备名称不能为空!");
