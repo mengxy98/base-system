@@ -3,6 +3,8 @@ function initManager(){
 	findDeviceTypeDict(); 
 	//查找设备列表
 	deviceManagermentList();
+	//查询任务列表
+	findDeviceTask();
 	
 	$("div[class='col-xs-12 col-sm-6']").html($("#addAlterDelete",window.parent.document).html());
     $("#add").click(function(){
@@ -51,6 +53,28 @@ function findDeviceTypeDict(){
 				$("#addDeviceType").append($(datas));
 				$("#modifyDeviceType").append($(datas));
 			});
+		}
+	});
+}
+
+/**
+ * 获取所有任务
+ */
+function findDeviceTask(){
+	$.ajax({
+		url : Main.contextPath+"/taskManagermentController/getTaskList.do",
+		type : "post",
+		async : false,
+		dataType : "json",
+		success : function(result) {
+			window.parent.existsUser(result);//判断用户是否已失效
+			var datas = "<option value=''></option>";
+			$.each(result,function(ind,map){
+			    datas += "<option value='" + map.id
+				+ "'>" + map.taskName + "</option>";
+			});
+			$("#task").append($(datas));
+			$("#modifyTask").append($(datas));
 		}
 	});
 }
@@ -112,6 +136,12 @@ function deviceManagermentList() {
 										}
 									},{
 										"data" : "deviceName",
+										"render" : function(data, type, full,
+												meta) {// 渲染，修改数据的展现形式
+											return "<p style='text-align:left'>"+ data + "</p>";
+										}
+									},{
+										"data" : "taskName",
 										"render" : function(data, type, full,
 												meta) {// 渲染，修改数据的展现形式
 											return "<p style='text-align:left'>"+ data + "</p>";
@@ -234,9 +264,9 @@ function addDeviceManagerment(){
 	var ip = $("#ip").val().trim();
 	var remark = $("#remarkContent").val().trim();
 	var isShake = $("#isShake").val().trim();
-	var segment = $("#segment").val().trim();
+	var taskId = $("#task").val().trim();
 	var params = JSON.stringify([{
-		"sid":segment,
+		"taskId":taskId,
 		"deviceName":deviceName,
 		"operator":operator,
 		"deviceType":deviceType,
@@ -253,8 +283,6 @@ function addDeviceManagerment(){
 	   alert("驾驶员不能为空!");
    }else if(ip == ""){
 	   alert("IP不能为空!");
-   }else if(segment == ""){
-	   alert("标段不能为空!");
    }else if(deviceType < 0){
 	   alert("请选择设备类型!");
    }else{	 
@@ -313,7 +341,7 @@ function modifyDevice(){
 		$("#modifyWidth").val(datas[0].width);
 		$("#modifyIp").val(datas[0].ip);
 		$("#modifyRemark").val(datas[0].remark);
-		$("#modifySegment").val(datas[0].sid);
+		$("#modifyTask").val(datas[0].taskId);
 		$("#modifyIsShake").val(datas[0].isShake);
 		
 		$("#proDiolagAdd").hide();
@@ -332,10 +360,10 @@ function saveModifyDevice(){
 	var width = $("#modifyWidth").val().trim();
 	var ip = $("#modifyIp").val().trim();
 	var remark = $("#modifyRemark").val().trim();
-	var segment = $("#modifySegment").val().trim();
+	var taskId = $("#modifyTask").val().trim();
 	var params = JSON.stringify([{
 		"id":modifyDeviceId,
-		"sid":segment,
+		"taskId":taskId,
 		"deviceName":deviceName,
 		"operator":operator,
 		"deviceType":deviceType,
@@ -351,8 +379,6 @@ function saveModifyDevice(){
 	   alert("驾驶员不能为空!");
    }else if(ip == ""){
 	   alert("IP不能为空!");
-   }else if(segment == ""){
-	   alert("标段不能为空!");
    }else if(deviceType < 0){
 	   alert("请选择设备类型!");
    }else{	 

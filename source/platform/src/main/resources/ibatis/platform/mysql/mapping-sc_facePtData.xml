@@ -101,7 +101,7 @@
 				#taskId#,
 				#isValid#
 			)
-		
+		on DUPLICATE key UPDATE divNum=divNum+1
 	</insert>
 	
 	<delete id="deleteData" parameterClass="java.lang.String">

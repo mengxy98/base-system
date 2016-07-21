@@ -1,4 +1,4 @@
-var pageSize=2;
+var pageSize=4;
 var oLanguage = {// 下面是一些汉语翻译
 	"sSearch" : "网站搜索",
 	"sLengthMenu" : "每页显示 _MENU_ 条记录",

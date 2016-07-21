@@ -1,5 +1,6 @@
 package com.net.base.service.cache;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,7 +19,8 @@ import com.net.base.util.TransData;
 @Service
 public class CacheDataService {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	private static Map<String, Boolean> openFlagMap = new HashMap<String, Boolean>();
+	
 	@Autowired
 	private CacheDataDao cacheDataDao;
 	
@@ -31,45 +33,38 @@ public class CacheDataService {
 	@Autowired
 	private BaseMemcache baseMemcache;
 	
+	/**
+	 * 方法说明:
+	 * @param deviceId
+	 * @return
+	 * Date: 2016年7月21日下午3:03:30
+	 * @author mengxy
+	 * @version 1.0
+	 * @since:
+	 * 	        Map<String, Object> param = new HashMap<String, Object>();
+				param.put("deviceId", deviceId);
+				mess = positionManagerDao.getPositionData(param);
+				baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,mess);
+
+	 */
 	public String getDevData(Object deviceId){
 		String mess="";
 		try {
-			String o = baseMemcache.getCacheData(ModelType.DEVICE_MANAGER, deviceId);
-			if (null == o || o.length()<1) { //代表缓存中没有这个数据
-				/*Map<String, Object> param = new HashMap<String, Object>();
-				param.put("deviceId", deviceId);
-				mess = positionManagerDao.getPositionData(param);
-				baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,mess);*/
-			}else {
-				//代表缓存中存在缓存的对应数据，从缓存中获取对应数据
-				mess = o.toString();
+			/**
+			 * 如果数据开关是开的，取缓存数据，如果是关闭状态，就是直接返回null数据
+			 */
+			if(null != openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId) && openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId)){
+				String o = baseMemcache.getCacheData(ModelType.DEVICE_MANAGER, deviceId);
+				if (null != o && o.length() > 0) { //代表缓存中没有这个数据
+					mess = o.toString();
+				}
+				openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,false);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		return mess;
-	}
-
-	public boolean setDevData(Object deviceId,String dataList){
-		try {
-			/*String[] column={"CMV","frequency","divNum","satelliteTime","RTKfixed","speed","elevation","longitude","latitude","taskId","X","Y","Z","direction","GPSStatus","compactId",
-					"RMV","F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime","isValid"};
-			Map<String, String> param = TransData.transData(dataList,column);
-			param.put("deviceId", deviceId.toString());
-			try {
-				positionManagerDao.addMainData(param);
-			} catch (Exception e1) {
-				logger.error(e1.getMessage());
-				return false;
-			}*/
-			return baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,dataList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			return false;
-		}
-		
 	}
 
 
@@ -96,19 +91,23 @@ public class CacheDataService {
 							//定位数据
 							String[] column={"taskId","deviceId","longitude","latitude","elevation","X","Y","Z",
 									"speed","satelliteTime","direction","GPSStatus","compactId","CMV","RMV","frequency",
-									 "F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime","isValid"};
+									 "F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime"};
 							Map<String, String> param = TransData.transData(data[i],column);
+							param.put("isValid", "1");
 							positionManagerDao.addMainData(param);
 							//表层数据表先不测试
-							/*param.put("divNum", "");
-							param.put("thickness", "");
-							faceDataManagerDao.addMainData(param);*/
+							param.put("divNum", "1");
+							param.put("thickness", "1");
+							faceDataManagerDao.addMainData(param);
 						} catch (Exception e1) {
 							logger.error(e1.getMessage());
 						}
 					}
 				}
 			});
+			if(null == openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId) || !openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId)){
+				openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,true);
+			}
 			return baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,dataList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,4 +115,6 @@ public class CacheDataService {
 			return false;
 		}
 	}
+	
+	
 }

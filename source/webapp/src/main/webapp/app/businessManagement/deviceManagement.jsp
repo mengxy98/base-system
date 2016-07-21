@@ -137,6 +137,7 @@
 		                                                 <th style="width:4%;"></th>
 		                                                 <th style="vertical-align: middle;width:5%;" data-class="expand" >序号</th>                                                        	
 		                                                 <th style="vertical-align: middle;"data-class="phone">设备名称</th>
+		                                                 <th style="vertical-align: middle;"data-hide="phone" >所属任务</th>
 		                                                 <th style="vertical-align: middle;"data-hide="phone" >驾驶员</th>
 		                                                 <th style="vertical-align: middle;"  data-hide="phone,tablet;">设备类型</th>                                                                                                                       
 		                                                 <th style="vertical-align: middle;"  data-hide="phone,tablet;">前距</th>                                                                                                                       
@@ -182,8 +183,8 @@
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">
 					<p style="overflow:hidden;width:100%;">
-						<span style="float:left;width:15%;text-align:right">标段：</span>
-						<input id="segment" style="float:left;width:52%" type="text" />
+						<span style="float:left;width:15%;text-align:right">任务：</span>
+						<select id="task" style="float:left;width:52%" ></select>
 					</p>
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">
@@ -272,8 +273,8 @@
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">
 					<p style="overflow:hidden;width:100%;">
-						<span style="float:left;width:15%;text-align:right">标段：</span>
-						<input id="modifySegment" style="float:left;width:52%" type="text" />
+						<span style="float:left;width:15%;text-align:right">任务：</span>
+						<select id="modifyTask" style="float:left;width:52%"></select>
 					</p>
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">

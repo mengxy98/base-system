@@ -58,8 +58,10 @@
             </div>
         </div>
        
-        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/satellite.js"></script>
-         <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/data.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/satelliteNew.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/data.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/Concurrent.Thread.js"></script>
+       
         <script>
             var satellite = new Satellite({
                 panel:'#panel',
@@ -128,12 +130,16 @@
 			             data: {deviceId:11},
 			             dataType: "text",
 			             success: function(data){
-			            	 if(data.length > 0){
+			            	 if(data.length==0){
+			            		 clearInterval(getinterval);
+		            			 drawFlag=false;
+			            	 }else{
 			            		 if(olddata!=data){
 				            		 olddata = data;
 				            		 //解析data成需要的数组
 				            	     var allData = data.split(";");
 				            		 for(var i=0;i<allData.length;i++){
+				            			// satellite.pushData(allData[i].split(","));
 				            			var empArray=allData[i].split(",");
 				            			var arrayData=new Array(empArray[13],empArray[15],0,empArray[9],empArray[11],empArray[8],empArray[4],empArray[6],empArray[5]);
 				            			satellite.pushData(arrayData);//新格式数据
@@ -149,27 +155,21 @@
 			             }
 		            });
 				 },500);    
-			}
-			function testData(){
-			    var i = 0;
-				var setinterval = setInterval(function () {
-					 if(i>=(sate.length)){
-						  clearInterval(setinterval);
-					  }
-					  //模拟5条数据
-					  var emp = sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";";
-					  $.ajax({
-				             type: "POST",
-				             url: "<%=request.getContextPath()%>/cache/setDevDataOld.do",
-				             data: {deviceId:11,dataList:emp},
-				             dataType: "json",
-				             success: function(data){
-				            	 
-				             },error:function(){
-				            	 alert("系统错误，请稍后再试!");
-				             }
-			         });
-				},1000);
+				// satellite.pushDatas(sate);satellite.play();
+        		/*for(var i=0;i<sate.length;i++){
+        			var arrayData=new Array();
+        			arrayData[0]=sate[i][13];
+        			arrayData[1]=sate[i][15];
+        			arrayData[2]=0;
+        			arrayData[3]=sate[i][9];
+        			arrayData[4]=sate[i][11];
+        			arrayData[5]=sate[i][8];
+        			arrayData[6]=sate[i][4];
+        			arrayData[7]=sate[i][6];
+        			arrayData[8]=sate[i][5];
+        			satellite.pushData(arrayData);//新格式数据
+        		 }
+        		 satellite.play();  */  
 			}
         </script>
     </body>

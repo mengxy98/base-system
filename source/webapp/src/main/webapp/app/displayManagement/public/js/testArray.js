@@ -184,7 +184,50 @@
         return true;
     }
 
+		
+	//判断两个线段是否相交
+	function linesIntersect(seg1, seg2, precision) {
+		var x1 = seg1[0][0],
+			y1 = seg1[0][1],
+			x2 = seg1[1][0],
+			y2 = seg1[1][1],
+			x3 = seg2[0][0],
+			y3 = seg2[0][1],
+			x4 = seg2[1][0],
+			y4 = seg2[1][1],
+			intPt,x,y,result = false, 
+			p = precision || 0,
+			denominator = (x1 - x2)*(y3 - y4) - (y1 -y2)*(x3 - x4);
+		if (denominator == 0) {
+		// check both segments are Coincident, we already know 
+		// that these two are parallel 
+			if (fix((y3 - y1)*(x2 - x1),p) == fix((y2 -y1)*(x3 - x1),p)) {
+				// second segment any end point lies on first segment
+				result = intPtOnSegment(x3,y3,x1,y1,x2,y2,p) ||
+					intPtOnSegment(x4,y4,x1,y1,x2,y2,p);
+			}
+		} else {
+			x = ((x1*y2 - y1*x2)*(x3 - x4) - (x1 - x2)*(x3*y4 - y3*x4))/denominator;
+			y = ((x1*y2 - y1*x2)*(y3 - y4) - (y1 - y2)*(x3*y4 - y3*x4))/denominator;
+			// check int point (x,y) lies on both segment 
+			result = intPtOnSegment(x,y,x1,y1,x2,y2,p) 
+			&& intPtOnSegment(x,y,x3,y3,x4,y4,p);
+		}
+		return result;
+	} 
 
+	function intPtOnSegment(x,y,x1,y1,x2,y2,p) {
+		return fix(Math.min(x1,x2),p) <= fix(x,p) && fix(x,p) <= fix(Math.max(x1,x2),p) 
+			&& fix(Math.min(y1,y2),p) <= fix(y,p) && fix(y,p) <= fix(Math.max(y1,y2),p); 
+	}
+
+	// fix to the precision
+	function fix(n,p) {
+		return parseInt(n * Math.pow(10,p));
+	}
+
+	
+	
     //初始化类
     function Satellite(options){
         options = options || {};
@@ -198,16 +241,16 @@
             container:{
                 className:options.className === undefined ? '' : options.className,
             },
-			borderRange:options.borderRange === undefined ? 200 : options.borderRange,
+			borderRange:options.borderRange === undefined ? 10 : options.borderRange,
             isAutoPlay:options.isAutoPlay === undefined ? false : !!options.isAutoPlay,
             statusChange:isFunction(options.statusChange) ? options.statusChange : function(){},
 			pointIn:isFunction(options.pointIn) ? options.pointIn : function(){},
-            intervalTime:options.intervalTime === undefined ? 200 : parseInt(options.intervalTime),
-            colorList: options.colorList ? options.colorList : [[255,0,0],[0,255,0],[0,0,255],[0,255,255],[255,255,0],[255,224,0],[255,0,0],[42,255,0]],//rgb颜色
-            rate : options.rate === undefined ? 4 : options.rate,//1像素点对应多少厘米，也就是说5cm*5cm填充一个像素点 10*10 填充 2*2 两像素
-            precision: options.precision === undefined? 4 : options.precision,//多少单位厘米
+            intervalTime:options.intervalTime === undefined ? 200 : parseInt(options.intervalTime),//FFFF00
+            colorList: options.colorList ? options.colorList : [[255,255,0],[255,0,0],[0,255,0],[0,0,255],[0,255,255],[255,224,0],[255,0,0],[42,255,0]],//rgb颜色
+            rate : options.rate === undefined ? 5 : options.rate,//1像素点对应多少厘米，也就是说5cm*5cm填充一个像素点 10*10 填充 2*2 两像素
+            precision: options.precision === undefined? 20 : options.precision,//内插距离多少单位厘米
             machine:{
-                width: options.machineWidth === undefined ? 200 : options.machineWidth,//单位cm
+                width: options.machineWidth === undefined ? 200 : options.machineWidth,//单位cm 50
             }
         };
         this.panel = isString(this.configs.panel) ? document.querySelector(this.configs.panel) : this.configs.panel;
@@ -219,13 +262,18 @@
             height:0
         };
         this.stageCtx = null;
-
         this.satelliteData = [];
         this.interval = null;
+		this.drawData = {
+			list:[],
+			curr:null,
+			prev:null
+		};
 
         //当前处理后的状态数据
         this.satelliteStat = {
             status:[],
+			cacheStatus:[],
             prev:[],
             curr:[],
             next:[]
@@ -297,7 +345,7 @@
             this.container.appendChild(this.stage);
 			
 			this.panelInfo = panelInfo;
-
+			
         },
 
         //初始化容器
@@ -542,16 +590,46 @@
         //处理数据
         processData:function(){
             var curr = this.satelliteData.pop();
-            $("#testDat").val(this.satelliteData.length);
             if(!curr){
                 return false;
             }
+			
+			//var currStatus = this.satelliteStat.status;
+            //var prev = this.satelliteStat.prev;
+            //var curr = this.satelliteStat.curr;
+			
+            //this.satelliteStat.prev = this.satelliteStat.curr;
+            //this.satelliteStat.curr = curr;
+            //this.satelliteStat.next = this.satelliteData[this.satelliteData.length - 1];
 
-            this.satelliteStat.prev = this.satelliteStat.curr;
+			
+            //var prev = this.satelliteStat.prev;
+			
+			//第一次加载数据
+            if(this.satelliteStat.prev.length < 1){
+				this.satelliteStat.prev = curr;
+                return;
+            }
+			
+			var prev = this.satelliteStat.prev;
+
+            var prevPos = this.getRelativePos(prev);//像素
+            var currPos = this.getRelativePos(curr);//像素
+
+            var gap = this.configs.precision / this.configs.rate;//像素
+			
+			//去除距离过小的数据
+			if(!this.checkLegalPos(prevPos,currPos,gap)){
+				
+				return; 
+			}
+			
+			this.satelliteStat.prev = this.satelliteStat.curr;
             this.satelliteStat.curr = curr;
             this.satelliteStat.next = this.satelliteData[this.satelliteData.length - 1];
-
-            var dire = this.getDirection();
+            
+			
+			var dire = this.getDirection();
 
             //回调数据出来
             this.configs.statusChange({
@@ -569,7 +647,7 @@
                 frequency:curr[1] || 0,//频率
             });
 
-            this.draw();
+            this.draw(prevPos,currPos,gap);
 
         },
 
@@ -590,25 +668,23 @@
         },
 		
         //卫星数据
-        draw:function(){
+        draw:function(prevPos,currPos,gap){
             var that = this;
-            var renderList = this.updateSatelliteStatus();
-
+            var renderList = this.updateSatelliteStatus(prevPos,currPos,gap);
+			
             if(!isArray(renderList)){
                 return;
             }
 			
 			//分割任务分别绘制解决卡的问题
             renderList.forEach(function(v,i){
-				setTimeout(function(){
-	                that.fillRect({
-	                    x:v.x,
-	                    y:v.y,
-	                    width:v.gap,
-	                    height:v.gap,
-	                    fillStyle:that.getFillStyle(v.cmv,v.level)
-	                });
-				},0)
+				that.fillRect({
+					x:v.x,
+					y:v.y,
+					width:v.gap,
+					height:v.gap,
+					fillStyle:that.getFillStyle(v.cmv,v.level)
+				});
             });
 
             //this.stageCtx.draw();
@@ -624,10 +700,10 @@
             }
 
             if(this.relativePos.px === 0){
-                this.relativePos.px = parseFloat(curr[8]);
+                this.relativePos.px = Math.round(curr[8]);
             }
             if(this.relativePos.py === 0){
-                this.relativePos.py = parseFloat(curr[7]);
+                this.relativePos.py = Math.round(curr[7]);
             }
 
             this.relativePos.cx = parseFloat(this.stageSize.width) / 2;
@@ -646,24 +722,149 @@
 
             return resPos;
         },
-
+			
+		fixedRect(rect){
+			
+			var prev = this.drawData.prev;
+			var curr = this.drawData.curr;
+			var currPos = this.drawData.currPos;
+			
+			if(!prev){
+				
+				rect = [{
+					x:curr.x,
+					y:curr.y
+				},{
+					x:curr.x1,
+					y:curr.y1
+				},{
+					x:curr.x2,
+					y:curr.y2
+				},{
+					x:curr.x3,
+					y:curr.y3
+				}];
+				
+			}else{
+				
+				rect = [{
+					x:prev.x3,
+					y:prev.y3
+				},{
+					x:prev.x2,
+					y:prev.y2
+				},{
+					x:curr.x2,
+					y:curr.y2
+				},{
+					x:curr.x3,
+					y:curr.y3
+				}];
+				
+			}
+			
+			var isIntersect2 = linesIntersect([[rect[0].x,rect[0].y],[rect[1].x,rect[1].y]],[[rect[2].x,rect[2].y],[currPos.x - 1,currPos.y - 1]]);
+			var isIntersect3 = linesIntersect([[rect[0].x,rect[0].y],[rect[1].x,rect[1].y]],[[rect[3].x,rect[3].y],[currPos.x - 1,currPos.y - 1]]);
+			
+			if(isIntersect2){
+				rect[2].x = rect[1].x;
+				rect[2].y = rect[1].y;
+				
+				var prev = this.drawData.prev;
+				//this.drawData.curr.x3 = rect[3].x;
+				//this.drawData.curr.y3 = rect[3].y;
+				
+				this.drawData.curr.x2 = this.drawData.prev.x2;
+				this.drawData.curr.y2 = this.drawData.prev.y2;
+				
+			}else if(isIntersect3){
+				rect[3].x = rect[0].x;
+				rect[3].y = rect[0].y;
+				
+				
+				var prev = this.drawData.prev;
+				//this.drawData.curr.x3 = rect[3].x;
+				//this.drawData.curr.y3 = rect[3].y;
+				
+				this.drawData.curr.x3 = this.drawData.prev.x3;
+				this.drawData.curr.y3 = this.drawData.prev.y3;
+			}
+			
+			return rect;
+			
+		},
+		
+		
         drawRect:function(rect){
+			
             var pos = this.relativePos;
-            rect = [{
-                x:rect.x+pos.cx,
-                y:rect.y+pos.cy
-            },{
-                x:rect.x1+pos.cx,
-                y:rect.y1+pos.cy
-            },{
-                x:rect.x2+pos.cx,
-                y:rect.y2+pos.cy
-            },{
-                x:rect.x3+pos.cx,
-                y:rect.y3+pos.cy
-            }];
-
-
+			
+			var prev = this.drawData.prev;
+			var curr = this.drawData.curr;
+			var currPos = this.drawData.currPos;
+			
+			if(!prev){
+				
+				rect = [{
+					x:curr.x + pos.cx,
+					y:curr.y + pos.cy
+				},{
+					x:curr.x1 + pos.cx,
+					y:curr.y1 + pos.cy
+				},{
+					x:curr.x2 + pos.cx,
+					y:curr.y2 + pos.cy
+				},{
+					x:curr.x3 + pos.cx,
+					y:curr.y3 + pos.cy
+				}];
+				
+			}else{
+				
+				rect = [{
+					x:prev.x3 + pos.cx,
+					y:prev.y3 + pos.cy
+				},{
+					x:prev.x2 + pos.cx,
+					y:prev.y2 + pos.cy
+				},{
+					x:curr.x2 + pos.cx,
+					y:curr.y2 + pos.cy
+				},{
+					x:curr.x3 + pos.cx,
+					y:curr.y3 + pos.cy
+				}];
+				
+			}
+			
+			var isIntersect2 = linesIntersect([[rect[0].x,rect[0].y],[rect[1].x,rect[1].y]],[[rect[2].x,rect[2].y],[currPos.x + pos.cx - 1,currPos.y + pos.cy - 1]]);
+			var isIntersect3 = linesIntersect([[rect[0].x,rect[0].y],[rect[1].x,rect[1].y]],[[rect[3].x,rect[3].y],[currPos.x + pos.cx - 1,currPos.y + pos.cy - 1]]);
+			
+			if(isIntersect2){
+				rect[2].x = rect[1].x;
+				rect[2].y = rect[1].y;
+				
+				var prev = this.drawData.prev;
+				//this.drawData.curr.x3 = rect[3].x;
+				//this.drawData.curr.y3 = rect[3].y;
+				
+				this.drawData.curr.x2 = this.drawData.prev.x2;
+				this.drawData.curr.y2 = this.drawData.prev.y2;
+				
+			}else if(isIntersect3){
+				rect[3].x = rect[0].x;
+				rect[3].y = rect[0].y;
+				
+				
+				var prev = this.drawData.prev;
+				//this.drawData.curr.x3 = rect[3].x;
+				//this.drawData.curr.y3 = rect[3].y;
+				
+				this.drawData.curr.x3 = this.drawData.prev.x3;
+				this.drawData.curr.y3 = this.drawData.prev.y3;
+			}
+			
+			
             var ctx = this.stageCtx;
             ctx.beginPath();
             for(var i=0,len=rect.length;i<=len;i++){
@@ -676,26 +877,29 @@
                     ctx.moveTo(rect[i].x, rect[i].y);
                 }
             }
+			
             ctx.stroke();
 
         },
-
+		
+		//检查距离是否合法，如果两个点的距离小于20厘米则忽略
+		checkLegalPos(prev,currPos,gap){
+			var dec = Math.sqrt(Math.pow((prev.x - currPos.x),2) + Math.pow((prev.y - currPos.y),2))
+			if(dec < gap){
+				return false;
+			}
+			return true;
+		},
+		
         //更新状态并返回要渲染列表
-        updateSatelliteStatus:function(){
-            var currStatus = this.satelliteStat.status;
+        updateSatelliteStatus:function(prevPos,currPos,gap){
+			
+			var currStatus = this.satelliteStat.status;
             var prev = this.satelliteStat.prev;
             var curr = this.satelliteStat.curr;
-
-            if(prev.length < 1){
-                return;
-            }
-
-            var prevPos = this.getRelativePos(prev);//像素
-            var currPos = this.getRelativePos(curr);//像素
-
-            var gap = this.configs.precision / this.configs.rate;//像素
-            var width = this.configs.machine.width / this.configs.rate;//宽多少像素
-				
+			
+			var width = this.configs.machine.width / this.configs.rate;//宽多少像素
+			
 			this.adjustStage(currPos);
 			
             var rect = {
@@ -713,12 +917,14 @@
 
                     x1:prevPos.x + width/2,
                     y1:prevPos.y,
-
-                    x2:currPos.x - width/2,
+					
+					
+                    x2:currPos.x + width/2,
                     y2:currPos.y,
 
-                    x3:currPos.x + width/2,
-                    y3:currPos.y
+                    x3:currPos.x - width/2,
+                    y3:currPos.y,
+
                 };
 
             }else if(prevPos.y === currPos.y){
@@ -729,12 +935,13 @@
 
                     x1:prevPos.x,
                     y1:prevPos.y + width/2,
-
-                    x2:currPos.x,
-                    y2:currPos.y - width/2,
-
+					
+					x2:currPos.x,
+                    y2:currPos.y + width/2,
+					
                     x3:currPos.x,
-                    y3:currPos.y + width/2,
+                    y3:currPos.y - width/2,
+					
                 };
             }else{
                 //根据两点得到斜率
@@ -751,39 +958,62 @@
 
                 //var y1 = (prevPos.x - dx) * va + b;
                 //var y2 = (prevPos.x + dx) * va + b;
-
+				
                 rect = {
                     x:Math.round(prevPos.x - dx),
                     y:Math.round((prevPos.x - dx) * va + b),
 
                     x1:Math.round(prevPos.x + dx),
                     y1:Math.round((prevPos.x + dx) * va + b),
-
-                    x2:Math.round(currPos.x - dx),
-                    y2:Math.round((currPos.x - dx) * va + b1),
-
-                    x3:Math.round(currPos.x + dx),
-                    y3:Math.round((currPos.x + dx) * va + b1),
-
+					
+					x2:Math.round(currPos.x + dx),
+                    y2:Math.round((currPos.x + dx) * va + b1),
+					
+                    x3:Math.round(currPos.x - dx),
+                    y3:Math.round((currPos.x - dx) * va + b1),
+					
                 }
 
             }
-
+			
+			this.drawData.list.push(rect);
+			this.drawData.prev = this.drawData.curr;
+			this.drawData.curr = rect;//计算后的
+			this.drawData.currPos = currPos;
+			
+			rect = this.fixedRect(rect);
+			
+			
+			//this.drawRect(rect);
+			
+			//return;
+			
+			
+			
+			
             var mostData = {
-                left:Math.round(Math.min(rect.x,rect.x1,rect.x2,rect.x3)),
-                right:Math.round(Math.max(rect.x,rect.x1,rect.x2,rect.x3)),
-                top:Math.round(Math.max(rect.y,rect.y1,rect.y2,rect.y3)),
-                bottom:Math.round(Math.min(rect.y,rect.y1,rect.y2,rect.y3)),
+                left:Math.round(Math.min(rect[0].x,rect[1].x,rect[2].x,rect[3].x)),
+                right:Math.round(Math.max(rect[0].x,rect[1].x,rect[2].x,rect[3].x)),
+                top:Math.round(Math.max(rect[0].y,rect[1].y,rect[2].y,rect[3].y)),
+                bottom:Math.round(Math.min(rect[0].y,rect[1].y,rect[2].y,rect[3].y)),
             };
 			
+			//如果在缓存的点内不更新状态
+			if(this.satelliteStat.cacheStatus.length < 1){
+				
+				
+			}
 			
 			
+			/*
             var renderList = [];
-
-            for(var i = Math.round(mostData.left/gap),width = Math.round(mostData.right/gap); i <= width; i++){
-                for(var j= Math.round(mostData.bottom/gap),height = Math.round(mostData.top/gap); j <= height; j++){
-                    if(this.checkIntersect(i,j,gap,rect)){//判断两个矩形是否重合
-                        var renderData = this.updateStatus(i,j,gap,curr[0]);
+			
+            for(var i = Math.round(mostData.left/gap),width = Math.round(mostData.right/gap); i < width; i++){
+                for(var j= Math.round(mostData.bottom/gap),height = Math.round(mostData.top/gap); j < height; j++){
+					if(this.checkIntersect(i*gap,j*gap,gap,rect)){//判断两个矩形是否重合
+					
+                        var renderData = this.updateStatus(i*gap,j*gap,gap,curr[0]);
+						
                         var offsetX = this.stageSize.width/2;
                         var offsetY = this.stageSize.height/2;
                         renderData.x = renderData.x + offsetX;
@@ -792,9 +1022,15 @@
                     }
                 }
             }
+			*/
+			var renderList = this.getRenderList(mostData,gap,rect,curr)
 
             return renderList;
+			
         },
+		
+		
+		
 		
 		//适应舞台显示的内容
 		adjustStage:function(rect){
@@ -806,8 +1042,8 @@
 			
 			//偏移的距离
 			var currCenter = {
-				x:parseFloat(this.stageStatus.translate.x),
-				y:parseFloat(this.stageStatus.translate.y)
+				x:Math.round(this.stageStatus.translate.x),
+				y:Math.round(this.stageStatus.translate.y)
 			};
 			
 			//舞台的宽高
@@ -837,6 +1073,92 @@
 			
 		},
 		
+		//缓存三个点不检测，冲突
+		getRenderList(mostData,gap,rect,curr){
+			
+			var cacheLen = this.satelliteStat.cacheStatus.length;
+			var that = this;
+			
+			if(cacheLen < 4){
+				this.satelliteStat.cacheStatus[cacheLen] = [];
+			}
+			
+			var offsetX = this.stageSize.width/2;
+			var offsetY = this.stageSize.height/2;
+			
+			
+			var renderList = [];
+			
+            for(var i = Math.round(mostData.left/gap),width = Math.round(mostData.right/gap); i < width; i++){
+                for(var j= Math.round(mostData.bottom/gap),height = Math.round(mostData.top/gap); j < height; j++){
+					if(this.checkIntersect(i*gap,j*gap,gap,rect)){//判断两个矩形是否重合
+						
+						var renderData = this.updateCache(i*gap,j*gap,gap,curr[0]);
+						
+						renderData.x = renderData.x + offsetX;
+						renderData.y = renderData.y + offsetY;
+						renderList.push(renderData);
+						
+                    }
+                }
+            }
+			
+			if(this.satelliteStat.cacheStatus.length >= 4){
+				this.satelliteStat.cacheStatus[0].forEach(function(v,i){
+					that.satelliteStat.status.push(v);
+				});
+				this.satelliteStat.cacheStatus.splice(0,1);
+				this.satelliteStat.cacheStatus.push([]);
+			}
+
+            return renderList;
+			
+		},
+		
+		//更新缓存
+		updateCache(i,j,gap,cmv){
+			var cacheLen = this.satelliteStat.cacheStatus.length;
+			
+			var res = this.updateStatus(i,j,gap,cmv);
+			
+			var that = this;
+			
+			if(res){
+				return res;
+			}
+			
+			
+			this.satelliteStat.cacheStatus.forEach(function(v,idxCac){
+				
+				var idx = v.findIndex(function(v,index){
+					if(v.x == i && v.y == j){
+						return true;
+					}
+				});
+				
+				if(idx < 0){
+					that.satelliteStat.cacheStatus[cacheLen - 1].push({
+						level:0,
+						x:i,
+						y:j,
+						cmv:cmv,
+						gap:gap
+					});
+				}
+				
+			});
+			
+			return {
+				level:0,
+				x:i,
+				y:j,
+				cmv:cmv,
+				gap:gap
+			}
+			
+		},
+		
+		
         updateStatus:function(i,j,gap,cmv){
             //var beforeList = this.satelliteStat.status;
             var res = null;
@@ -851,7 +1173,8 @@
                     return true;
                 }
             });
-
+			
+			
             if(idx > -1){
                 tmp = this.satelliteStat.status[idx];
                 tmp.level += 1;
@@ -867,24 +1190,8 @@
                     level:tmp.level
                 }
 
-            }else{
-                this.satelliteStat.status.push({
-                    level:0,
-                    x:i,
-                    y:j,
-                    cmv:cmv,
-                    gap:gap
-                });
-
-                res = {
-                    level:0,
-                    x:i,
-                    y:j,
-                    cmv:cmv,
-                    gap:gap
-                }
             }
-
+			
             return res;
         },
 
@@ -925,15 +1232,12 @@
 
         //开始播放
         play : function(){
-        	 var that = this;
-             this.interval = setInterval(function () {
-                 if(that.processData() === false){
-                    // that.stop();
-                 	if(!drawFlag){
-                 		that.stop();
-                 	}
-                 }
-             },this.configs.intervalTime);
+            var that = this;
+            this.interval = setInterval(function () {
+                if(that.processData() === false){
+                    that.stop();
+                }
+            },  this.configs.intervalTime);
 
         },
 
