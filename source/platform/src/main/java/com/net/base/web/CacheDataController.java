@@ -50,6 +50,12 @@ public class CacheDataController {
 		return mess;
 	}
 	
+	@RequestMapping(value="/getMultiDevData.do",method=RequestMethod.GET)
+	@ResponseBody
+	public String getMultiDevData(int deviceIds[]){
+		if (deviceIds.length < 0) return "";
+		return CacheDataService.getMultiDevData(deviceIds);
+	}
 	/**
 	 * 方法说明:设备插入定位数据和表层数据,是对外开放的接口，不用登陆就可以使用的
 	 * @param deviceId

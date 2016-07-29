@@ -151,8 +151,14 @@
 				#serverTime#,
 				#isValid#
 			)
-		
+		  <selectKey resultClass="java.lang.Integer" keyProperty="id" >
+		      SELECT LAST_INSERT_ID()
+		  </selectKey>
 	</insert>
+	
+	<select id="findMaxId" resultClass="java.lang.Integer">
+		SELECT LAST_INSERT_ID();
+	</select>
 	
 	<delete id="deleteData" parameterClass="java.lang.String">
 		delete from sc_positiondata where id=#id#

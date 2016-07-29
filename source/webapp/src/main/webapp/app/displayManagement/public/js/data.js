@@ -669,6 +669,26 @@ var sate=[["0","0","118.383396701167","29.0819549236667","137.617","634580.69285
              ["0","0","118.383566659667","29.0819690266667","137.377","634597.224802512","3219204.11849256","137.377","3.87","2016/3/30 14:30:10","True","RTKfixed","0","16.8","0.03802085","3.4","0.002133607813","0.003520846563","0.2958304375"],
              ["0","0","118.383568898333","29.0819692993333","137.373","634597.442445558","3219204.15127955","137.373","3.96","2016/3/30 14:30:10","True","RTKfixed","0","25.4","0.0348389625","3.4","0.002950715938","0.001676988625","0.2965350938"]];
 
-             
+var sate1 = sate;
+var sate2 = sate.reverse();
+var sate3 = sate;
+var sate4 = sate.reverse();
+var sate5 = sate;
+var sate6 = sate.reverse();
+var sate7 = sate;
+var sate8 = sate.reverse();
+var sate9 = sate;
+var sate10 = sate.reverse();
 var sate11 = sate;
 var sate12 = sate.reverse();
+var sate13 = sate;
+var sate14 = sate.reverse();
+var sate15 = sate;
+var sate16 = sate.reverse();
+var sate17 = sate;
+var sate18 = sate.reverse();
+var sate19 = sate;
+var sate20 = sate.reverse();
+
+var sateArray=new Array(sate1,sate2,sate3,sate4,sate5,sate6,sate7,sate8,sate9,sate10,sate11,sate12,
+		sate13,sate14,sate15,sate16,sate17,sate18,sate19,sate20,sate1);

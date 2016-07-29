@@ -10,7 +10,7 @@ public interface PositionManagerDao {
 
 	int deleteMainData(String id);
 
-    void addMainData(Map<String, String> param);
+	Object addMainData(Map<String, String> param);
 
 	Integer findMainDataListCount(Map<String, Object> map);
 

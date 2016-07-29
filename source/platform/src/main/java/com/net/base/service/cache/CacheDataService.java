@@ -3,6 +3,8 @@ package com.net.base.service.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +43,6 @@ public class CacheDataService {
 	 * @author mengxy
 	 * @version 1.0
 	 * @since:
-	 * 	        Map<String, Object> param = new HashMap<String, Object>();
-				param.put("deviceId", deviceId);
-				mess = positionManagerDao.getPositionData(param);
-				baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,mess);
-
 	 */
 	public String getDevData(Object deviceId){
 		String mess="";
@@ -58,7 +55,12 @@ public class CacheDataService {
 				if (null != o && o.length() > 0) { //代表缓存中没有这个数据
 					mess = o.toString();
 				}
-				openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,false);
+				/**
+				 * 防止开关冲突，数据丢失
+				 */
+				synchronized (openFlagMap) {
+					openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,false);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,6 +82,22 @@ public class CacheDataService {
 	}
 
 	public boolean setDevDataNew(final int deviceId, final String dataList) {
+		/**
+		 * 求取内差点，获取内差计算后的数据列表
+		 * 1  拆分数据，把原始数据里面的x,y坐标取出来，放到缓存原始点的队列里面 Map<devId,Liekedlist<点>
+		 * 2 根据原始点，计算所有的原始点
+		 * 3 把返回的所有内差点，存储缓存，注意，缓存数据的最简化数据，保证带宽
+		 * 4 开启多线程，插入数据的，注意表层点的定位id是一样的
+		 */
+		/***第一步实现**/
+		/***第二部实现**/
+		/***第三部实现**/
+		//打开设备取数据开关，避免数据的重复取数据，节省带宽
+		if(null == openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId) || !openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId)){
+			openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,true);
+		}
+		boolean reMes = baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,dataList);
+		/***第四部实现**/
 		try {
 			/**开启线程对数据库进行数据的相对应插入*/
 			ThreadPoolManager.getInstance().execute(new Runnable() {
@@ -94,26 +112,49 @@ public class CacheDataService {
 									 "F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime"};
 							Map<String, String> param = TransData.transData(data[i],column);
 							param.put("isValid", "1");
-							positionManagerDao.addMainData(param);
-							//表层数据表先不测试
+							String keyId = positionManagerDao.addMainData(param).toString();
+							//表层数据表
 							param.put("divNum", "1");
 							param.put("thickness", "1");
-							faceDataManagerDao.addMainData(param);
+							param.put("positionId",keyId);
+							String faceId = (String)faceDataManagerDao.addMainData(param).toString();
+							//过程数据对应表层点表 
+							param.put("RPId",faceId);
+							faceDataManagerDao.addProcessMainData(param);
 						} catch (Exception e1) {
 							logger.error(e1.getMessage());
 						}
 					}
 				}
 			});
-			if(null == openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId) || !openFlagMap.get(ModelType.DEVICE_MANAGER+deviceId)){
-				openFlagMap.put(ModelType.DEVICE_MANAGER+deviceId,true);
-			}
-			return baseMemcache.inputCacheData(ModelType.DEVICE_MANAGER, deviceId ,dataList);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
-			return false;
+			reMes = false;
 		}
+		return reMes;
+	}
+
+
+	/**
+	 * 方法说明:获取多台设备数据
+	 * @param deviceIds
+	 * @return
+	 * Date: 2016年7月22日上午10:36:16
+	 * @author mengxy
+	 * @version 1.0
+	 * @since:
+	 */
+	public String getMultiDevData(int[] deviceIds) {
+		Map<String, String> returnData = new HashMap<String, String>();
+		for (int i = 0; i < deviceIds.length; i++) {
+			returnData.put("DEVICE"+deviceIds[i], getDevData(deviceIds[i]));
+		}
+		if (returnData.size()>0) {
+			JSONObject jsonObject = JSONObject.fromObject(returnData);
+			return jsonObject.toString();
+		}
+		return "";
 	}
 	
 	

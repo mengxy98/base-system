@@ -27,8 +27,13 @@ public class FaceDataManageDaoImpl implements FaceDataManagerDao {
 	}
 
 	@Override
-	public void addMainData(Map<String, String> param) {
-	    basicDao.insert("sc_facePtData.addData",param);
+	public Object addMainData(Map<String, String> param) {
+	    return basicDao.insert("sc_facePtData.addData",param);
+	}
+ 
+	@Override
+	public Object addProcessMainData(Map<String, String> param) {
+		 return basicDao.insert("sc_facePtData.addProcessData",param);
 	}
 
 	@Override

@@ -27,8 +27,8 @@ public class PositionManageDaoImpl implements PositionManagerDao {
 	}
 
 	@Override
-	public void addMainData(Map<String, String> param) {
-	    basicDao.insert("sc_positiondata.addData",param);
+	public Object addMainData(Map<String, String> param) {
+	    return basicDao.insert("sc_positiondata.addData",param);
 	}
 
 	@Override

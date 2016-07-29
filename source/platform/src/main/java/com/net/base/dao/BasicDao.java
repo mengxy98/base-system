@@ -70,8 +70,8 @@ public class BasicDao<T> extends BaseSqlMapClientDaoSupport {
 				parms);
 	}
 
-	public <T> void insert(String statementName, T obj) {
-	    getSqlMapClientTemplate().insert(statementName, obj);
+	public <T> Object insert(String statementName, T obj) {
+	    return getSqlMapClientTemplate().insert(statementName, obj);
 	}
 
 	public <T> int delete(String statementName, T obj) {

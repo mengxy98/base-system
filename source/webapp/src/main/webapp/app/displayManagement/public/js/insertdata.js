@@ -1,50 +1,17 @@
-function testData11(){
-			    var i = 0;
-				var setinterval = setInterval(function () {
-					 if(i>=(sate11.length)){
-						  clearInterval(setinterval);
-						  setTimeout(function(){
-							  $.ajax({
-						             type: "POST",
-						             url: "<%=request.getContextPath()%>/cache/setDevDataEmp.do",
-						             data: {deviceId:11,dataList:""},
-						             dataType: "json",
-						             success: function(data){
-						            	 
-						             },error:function(){
-						            	 alert("系统错误，请稍后再试!");
-						             }
-					            });
-						  },1000);
-					  }
-					  //模拟5条数据
-					  var emp = sate11[i++].join(",")+";"+sate11[i++].join(",")+";"+sate11[i++].join(",")+";"+sate11[i++].join(",")+";"+sate11[i++].join(",")+";";
-					  $.ajax({
-				             type: "POST",
-				             url: "<%=request.getContextPath()%>/cache/setDevDataEmp.do",
-				             data: {deviceId:11,dataList:emp},
-				             dataType: "json",
-				             success: function(data){
-				            	 
-				             },error:function(){
-				            	 alert("系统错误，请稍后再试!");
-				             }
-			         });
-				},1000);
-			}
 
-
-
-function testData12(){
+function testData(id,path){
     var i = 0;
 	var setinterval = setInterval(function () {
-		 if(i>=(sate12.length)){
+		if(i>=5){
+			  clearInterval(setinterval);
+		  }
+		 if(i>=(sateArray[id].length)){
 			  clearInterval(setinterval);
 			  setTimeout(function(){
 				  $.ajax({
 			             type: "POST",
-			             url: "<%=request.getContextPath()%>/cache/setDevDataEmp.do",
-			             data: {deviceId:12,dataList:""},
+			             url: path+"/cache/setDevDataOld.do",
+			             data: {deviceId:id,dataList:""},
 			             dataType: "json",
 			             success: function(data){
 			            	 
@@ -55,11 +22,11 @@ function testData12(){
 			  },1000);
 		  }
 		  //模拟5条数据
-		  var emp = sate12[i++].join(",")+";"+sate12[i++].join(",")+";"+sate12[i++].join(",")+";"+sate12[i++].join(",")+";"+sate12[i++].join(",")+";";
+		  var emp = sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";";
 		  $.ajax({
 	             type: "POST",
-	             url: "<%=request.getContextPath()%>/cache/setDevDataEmp.do",
-	             data: {deviceId:12,dataList:emp},
+	             url: path+"/cache/setDevDataOld.do",
+	             data: {deviceId:id,dataList:emp},
 	             dataType: "json",
 	             success: function(data){
 	            	 

@@ -84,7 +84,8 @@
 			deviceId,
 			thickness,
 			taskId,
-			isValid
+			isValid,
+			positionId
 		)
 		values
 			(
@@ -99,10 +100,37 @@
 				#deviceId#,
 				#thickness#,
 				#taskId#,
-				#isValid#
+				#isValid#,
+				#positionId#
 			)
-		on DUPLICATE key UPDATE divNum=divNum+1
+		on DUPLICATE key UPDATE 
+			divNum=divNum+1,
+			positionId=#positionId#,		
+			thickness=#thickness#,
+			times=times+1,
+			Z=#Z#,
+			speed=#speed#,
+			CMV=#CMV#,
+			RMV=#RMV#
+		<selectKey resultClass="java.lang.Integer" keyProperty="id" >
+      		SELECT LAST_INSERT_ID()
+    	</selectKey>
 	</insert>
+	
+		<insert id="addProcessData" parameterClass="java.util.Map">
+	  insert into sc_processrangeptdata(
+	  		RPId,
+			PId,
+			isValid
+		)
+		values
+			(
+				#RPId#,
+				#positionId#,
+				#isValid#
+			)		
+	</insert>
+	
 	
 	<delete id="deleteData" parameterClass="java.lang.String">
 		delete from sc_rangeptdata where id=#id#
