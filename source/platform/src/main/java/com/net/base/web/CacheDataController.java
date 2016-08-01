@@ -75,7 +75,7 @@ public class CacheDataController {
 		}
 		return CacheDataService.setDevDataNew(deviceId, dataList);
 	}
-	@RequestMapping(value="/setDevDataOld.do",method=RequestMethod.POST)
+	@RequestMapping(value="/setDevDataEmp.do",method=RequestMethod.POST)
 	@ResponseBody
 	public boolean setDevDataOld(int deviceId,String dataList){
 		if(deviceId < 0)return false;

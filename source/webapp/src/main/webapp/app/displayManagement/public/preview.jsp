@@ -59,7 +59,9 @@
         </div>
        
         <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/satellite.js"></script>
-         <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/data.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/data.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/Concurrent.Thread.js"></script>
+        <script src="<%=request.getContextPath()%>/app/displayManagement/public/js/insertdata.js"></script>
         <script>
             var satellite = new Satellite({
                 panel:'#panel',
@@ -121,11 +123,20 @@
 			var globalCount=0;
 			var drawFlag=true;
 			function getData(){
-		          getinterval = setInterval(function () {
+				Concurrent.Thread.create(getSingleData,1);
+			}
+			
+			function testData(){
+				insertData(1,'<%=request.getContextPath()%>');
+			}
+			
+			
+			function getSingleData(devId){
+				getinterval = setInterval(function () {
 					 $.ajax({
 			             type: "GET",
 			             url: "<%=request.getContextPath()%>/cache/getDevData.do",
-			             data: {deviceId:11},
+			             data: {deviceId:devId},
 			             dataType: "text",
 			             success: function(data){
 			            	 if(data.length > 0){
@@ -148,28 +159,7 @@
 			            	 alert("系统错误，请稍后再试!");
 			             }
 		            });
-				 },500);    
-			}
-			function testData(){
-			    var i = 0;
-				var setinterval = setInterval(function () {
-					 if(i>=(sate.length)){
-						  clearInterval(setinterval);
-					  }
-					  //模拟5条数据
-					  var emp = sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";"+sate[i++].join(",")+";";
-					  $.ajax({
-				             type: "POST",
-				             url: "<%=request.getContextPath()%>/cache/setDevDataOld.do",
-				             data: {deviceId:11,dataList:emp},
-				             dataType: "json",
-				             success: function(data){
-				            	 
-				             },error:function(){
-				            	 alert("系统错误，请稍后再试!");
-				             }
-			         });
-				},1000);
+				 },500); 
 			}
         </script>
     </body>

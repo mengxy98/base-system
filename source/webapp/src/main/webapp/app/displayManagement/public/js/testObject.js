@@ -723,7 +723,7 @@
             return resPos;
         },
 			
-		fixedRect(rect){
+		fixedRect:function(rect){
 			
 			var prev = this.drawData.prev;
 			var curr = this.drawData.curr;
@@ -883,7 +883,7 @@
         },
 		
 		//检查距离是否合法，如果两个点的距离小于20厘米则忽略
-		checkLegalPos(prev,currPos,gap){
+		checkLegalPos:function(prev,currPos,gap){
 			var dec = Math.sqrt(Math.pow((prev.x - currPos.x),2) + Math.pow((prev.y - currPos.y),2))
 			if(dec < gap){
 				return false;
@@ -1074,7 +1074,7 @@
 		},
 		
 		//缓存三个点不检测，冲突
-		getRenderList(mostData,gap,rect,curr){
+		getRenderList:function(mostData,gap,rect,curr){
 			
 			var cacheLen = this.satelliteStat.cacheStatus.length;
 			var that = this;
@@ -1116,7 +1116,7 @@
 		},
 		
 		//更新缓存
-		updateCache(i,j,gap,cmv){
+		updateCache:function(i,j,gap,cmv){
 			var cacheLen = this.satelliteStat.cacheStatus.length;
 			
 			var res = this.updateStatus(i,j,gap,cmv);

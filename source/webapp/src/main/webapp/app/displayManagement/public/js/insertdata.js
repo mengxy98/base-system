@@ -1,16 +1,13 @@
 
-function testData(id,path){
+function insertData(id,path){
     var i = 0;
 	var setinterval = setInterval(function () {
-		if(i>=5){
-			  clearInterval(setinterval);
-		  }
 		 if(i>=(sateArray[id].length)){
 			  clearInterval(setinterval);
 			  setTimeout(function(){
 				  $.ajax({
 			             type: "POST",
-			             url: path+"/cache/setDevDataOld.do",
+			             url: path+"/cache/setDevDataEmp.do",
 			             data: {deviceId:id,dataList:""},
 			             dataType: "json",
 			             success: function(data){
@@ -25,7 +22,7 @@ function testData(id,path){
 		  var emp = sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";"+sateArray[id][i++].join(",")+";";
 		  $.ajax({
 	             type: "POST",
-	             url: path+"/cache/setDevDataOld.do",
+	             url: path+"/cache/setDevDataEmp.do",
 	             data: {deviceId:id,dataList:emp},
 	             dataType: "json",
 	             success: function(data){
