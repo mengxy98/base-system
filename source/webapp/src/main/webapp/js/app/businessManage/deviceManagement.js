@@ -3,14 +3,62 @@ function initManager(){
 	findDeviceTypeDict(); 
 	//查找设备列表
 	deviceManagermentList();
-	//查询任务列表
+
+	findSegmentList();
+	
 	findDeviceTask();
 	
+}
+window.onload=function(){
 	$("div[class='col-xs-12 col-sm-6']").html($("#addAlterDelete",window.parent.document).html());
-    $("#add").click(function(){
+	$("#btn_grooup").append(
+			" <div class=\"form-group\"><button type=\"button\" " +
+			" class=\"btn btn-primary\" id=\"bindTask\"><span class=\"fa fa-plus\">" +
+			" </span>设备绑定任务</button></div>"
+			);
+	
+	$("#bindTask").click(function(){
+		var datas = userManagerment_1.rows({selected : true}).data();
+		//将用户数据放上去
+		if(datas.length == '1'){
+			modifyDeviceId=datas[0].id;
+			$("#bindDeviceName").val(datas[0].deviceName);
+			
+			$.ajax({
+				url : Main.contextPath+"/deviceManagermentController/getDevTask.do?id="+datas[0].id,
+				type : "get",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					window.parent.existsUser(result);//判断用户是否已失效
+					$("#bindSegment").val(result);
+				}
+			});
+			
+			$("#proDiolagAdd").hide();	
+			$("#proDiolagRevise").hide();
+			$("#proDiolagBind").show();
+		}else{
+			alert("请选择一条记录");
+			
+		}
+	 })
+	 $("#bingX").click(function(){
+		 $("#proDiolagBind").hide();
+	 })
+	 $("#cancleBind").click(function(){
+		 $("#proDiolagBind").hide();
+	 })
+	 
+	 $("#saveBind").click(function(){
+		 saveDevBindTask();
+	 })
+	 
+	$("#add").click(function(){
 		 $(".txt").text("");
 		 $("#proDiolagAdd").show();	
 		 $("#proDiolagRevise").hide();
+		 $("#proDiolagBind").hide();
 		 $("#proDiolagAdd").find("input").val("");
 		 $("#remarkContent").val("");
 	 })
@@ -33,7 +81,49 @@ function initManager(){
 	$("#saveRevise").click(function(){
 		saveModifyDevice();
 	})
-  //  $("div[class='col-sm-6 col-xs-12']").append("<div><input id='jumpNum' type='text' /></div>");
+}
+
+function saveDevBindTask(){
+	var sId = $("#bindSegment").val().trim();
+	if(sId==""){
+		alert("请绑定任务!");
+		return false;
+	}
+	var params = JSON.stringify([{
+		"devid":modifyDeviceId,
+		"tid":sId	
+	}]);
+	$.ajax({
+			url : Main.contextPath+"/deviceManagermentController/addDevTask.do",
+			type : "post",
+			data:{params:params},
+			dataType : "json",
+			success : function(result) {
+				window.parent.existsUser(result);//判断用户是否已失效
+				alert(result.msg);
+				$("#proDiolagBind").hide();
+			}
+	});
+
+	
+}
+//父标段的下拉选择
+function findSegmentList(){
+	$.ajax({
+		url : Main.contextPath+"/segmentManagermentController/segmentList.do",
+		type : "post",
+		async : false,
+		dataType : "json",
+		success : function(result) {
+			window.parent.existsUser(result);//判断用户是否已失效
+			$.each(result,function(index,map){
+				var datas = "" + "<option value='" + map.sid
+				+ "'>" + map.sname + "</option>";
+				$("#task").append($(datas));
+				$("#modifyTask").append($(datas));
+			});
+		}
+	});
 }
 
 function findDeviceTypeDict(){
@@ -73,8 +163,7 @@ function findDeviceTask(){
 			    datas += "<option value='" + map.id
 				+ "'>" + map.taskName + "</option>";
 			});
-			$("#task").append($(datas));
-			$("#modifyTask").append($(datas));
+			$("#bindSegment").append($(datas));
 		}
 	});
 }
@@ -141,7 +230,7 @@ function deviceManagermentList() {
 											return "<p style='text-align:left'>"+ data + "</p>";
 										}
 									},{
-										"data" : "taskName",
+										"data" : "sName",
 										"render" : function(data, type, full,
 												meta) {// 渲染，修改数据的展现形式
 											return "<p style='text-align:left'>"+ data + "</p>";
@@ -264,9 +353,9 @@ function addDeviceManagerment(){
 	var ip = $("#ip").val().trim();
 	var remark = $("#remarkContent").val().trim();
 	var isShake = $("#isShake").val().trim();
-	var taskId = $("#task").val().trim();
+	var sId = $("#task").val().trim();
 	var params = JSON.stringify([{
-		"taskId":taskId,
+		"sId":sId,
 		"deviceName":deviceName,
 		"operator":operator,
 		"deviceType":deviceType,
@@ -341,7 +430,7 @@ function modifyDevice(){
 		$("#modifyWidth").val(datas[0].width);
 		$("#modifyIp").val(datas[0].ip);
 		$("#modifyRemark").val(datas[0].remark);
-		$("#modifyTask").val(datas[0].taskId);
+		$("#modifyTask").val(datas[0].segId);
 		$("#modifyIsShake").val(datas[0].isShake);
 		
 		$("#proDiolagAdd").hide();
@@ -360,11 +449,11 @@ function saveModifyDevice(){
 	var width = $("#modifyWidth").val().trim();
 	var ip = $("#modifyIp").val().trim();
 	var remark = $("#modifyRemark").val().trim();
-	var taskId = $("#modifyTask").val().trim();
+	var sId = $("#modifyTask").val().trim();
 	var isShake = $("#modifyIsShake").val().trim();
 	var params = JSON.stringify([{
 		"id":modifyDeviceId,
-		"taskId":taskId,
+		"sId":sId,
 		"deviceName":deviceName,
 		"operator":operator,
 		"deviceType":deviceType,

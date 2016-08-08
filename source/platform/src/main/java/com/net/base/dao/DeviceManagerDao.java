@@ -29,5 +29,21 @@ public interface DeviceManagerDao {
 	List<Map<String, Object>> findTypeDeviceByIp(Map<String, Object> map);
 
 	List<Map<String, Object>> findTaskInfoByIp(Map<String, Object> map);
+
+	String getDeviceData(Map<String, Object> map);
+
+	void addDevTask(Map<String, String> param);
+
+	String getDevTask(String deviceId);
+
+	String getAllDevInfo(Map<String, Object> map);
+
+	String getAllPhoneOwnerInfo(Map<String, Object> map);
+
+	String getPhoneOwnerByDevId(Map<String, Object> map);
+
+	boolean setDevDataNew(int deviceId, String dataList);
+
+	List<Map<String, Object>> getDeviceInfoByTaskId(Map<String, Object> map);
 	
 }

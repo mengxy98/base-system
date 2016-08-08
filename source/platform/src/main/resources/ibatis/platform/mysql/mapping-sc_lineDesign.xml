@@ -31,6 +31,9 @@
 				<isNotEmpty prepend="and" property="linename">
 					t.linename like '%$linename$%'
 				</isNotEmpty>
+				<isNotEmpty prepend="and" property="segmentId">
+					sg.sid =#segmentId#
+				</isNotEmpty>
 				<isNotEmpty property="order">
 					order by $order$
 				</isNotEmpty>

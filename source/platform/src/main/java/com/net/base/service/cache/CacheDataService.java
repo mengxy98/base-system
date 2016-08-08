@@ -7,8 +7,6 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
-import org.apache.poi.hssf.record.PrecisionRecord;
-import org.omg.CORBA.OBJ_ADAPTER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import com.net.base.dao.FaceDataManagerDao;
 import com.net.base.dao.PositionManagerDao;
 import com.net.base.memcache.BaseMemcache;
 import com.net.base.memcache.ModelType;
-import com.net.base.service.Point;
 import com.net.base.util.TransData;
 
 @Service

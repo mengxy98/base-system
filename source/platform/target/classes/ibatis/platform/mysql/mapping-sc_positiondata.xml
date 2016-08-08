@@ -39,8 +39,20 @@
 				<isNotEmpty prepend="and" property="taskName">
 					tsk.taskName like '%$taskName$%'
 				</isNotEmpty>
+				<isNotEmpty prepend="and" property="beginStNum">
+					tsk.beginStNum =#beginStNum#
+				</isNotEmpty>
+					<isNotEmpty prepend="and" property="endStNum">
+					tsk.endStNum =#endStNum#
+				</isNotEmpty>
 				<isNotEmpty prepend="and" property="deviceName">
 					dev.deviceName like '%$deviceName$%'
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="speed">
+					t.speed =#speed#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="serverTime">
+					t.serverTime =#serverTime#
 				</isNotEmpty>
 				<isNotEmpty property="order">
 					order by $order$

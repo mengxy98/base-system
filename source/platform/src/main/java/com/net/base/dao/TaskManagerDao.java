@@ -18,4 +18,6 @@ public interface TaskManagerDao {
 
 	List<Map<String, Object>> getTaskList();
 
+	List<Map<String, Object>> findTaskSegInfo(Map<String, Object> map);
+
 }

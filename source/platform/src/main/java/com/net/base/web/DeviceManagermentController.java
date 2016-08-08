@@ -85,6 +85,39 @@ public class DeviceManagermentController {
 	}
 	
 	
+	@LogMethod(description="获取设备任务数据",funcType=FunType.DEVICE_MANAGER)
+	@RequestMapping("/getDevTask.do")
+	@ResponseBody
+	public String getDevTask(String deviceId) {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		if(deviceId !=null){
+			try {
+				return deviceManagerDao.getDevTask(deviceId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return "";
+	}
+	@LogMethod(description="添加设备任务数据",funcType=FunType.DEVICE_MANAGER)
+	@RequestMapping("/addDevTask.do")
+	@ResponseBody
+	public Map<String,Object> addDevTask(HttpServletRequest request,@RequestParam String params) {
+		List<Map<String, String>> para = JsonUtils.getJson4List(params);
+		Map<String, String> param = para.get(0);
+		String createDate = new SimpleDateFormat("YYYYMMdd").format(new Date());
+		param.put("createTime", createDate);
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		try {
+			deviceManagerDao.addDevTask(param);
+			returnMap.put("msg", "添加成功");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			returnMap.put("msg", "添加失败");
+		}
+		return returnMap;
+	}
+	
 	@LogMethod(description="删除设备数据",funcType=FunType.DEVICE_MANAGER)
 	@RequestMapping("/deleteDeviceManagerment.do")
 	@ResponseBody

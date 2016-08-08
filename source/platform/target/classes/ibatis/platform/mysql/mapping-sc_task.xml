@@ -31,6 +31,9 @@
 				<isNotEmpty prepend="and" property="taskName">
 					t.taskName like '%$taskName$%'
 				</isNotEmpty>
+				<isNotEmpty prepend="and" property="taskId">
+					and t.id=#taskId#
+				</isNotEmpty>
 				<isNotEmpty property="order">
 					order by $order$
 				</isNotEmpty>
@@ -46,6 +49,20 @@
 						#size#
 					</isNotEmpty>
 				</isNotEmpty>
+	</select>
+	
+	<select id="findTaskSegInfo" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   			select 
+	   			  t.sid	as segmentId	
+				from sc_task t
+				where 1=1 
+				<isNotEmpty prepend="and" property="taskName">
+					t.taskName = #taskName#
+				</isNotEmpty>
+				<isNotEmpty prepend="and" property="taskId">
+					and t.id=#taskId#
+				</isNotEmpty>
+				limit 1
 	</select>
 		
 	<select id="getTaskList" parameterClass="java.util.Map" resultClass="java.util.HashMap">

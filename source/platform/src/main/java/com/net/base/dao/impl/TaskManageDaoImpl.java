@@ -46,4 +46,10 @@ public class TaskManageDaoImpl implements TaskManagerDao {
 		return basicDao.queryForList("sc_task.getTaskList",null);
 	}
 
+	@Override
+	public List<Map<String, Object>> findTaskSegInfo(Map<String, Object> map) {
+		return basicDao.queryForList("sc_task.findTaskSegInfo",map);
+	}
+
+	
 }

@@ -137,7 +137,7 @@
 		                                                 <th style="width:4%;"></th>
 		                                                 <th style="vertical-align: middle;width:5%;" data-class="expand" >序号</th>                                                        	
 		                                                 <th style="vertical-align: middle;"data-class="phone">设备名称</th>
-		                                                 <th style="vertical-align: middle;"data-hide="phone" >所属任务</th>
+		                                                 <th style="vertical-align: middle;"data-hide="phone" >所属标段</th>
 		                                                 <th style="vertical-align: middle;"data-hide="phone" >驾驶员</th>
 		                                                 <th style="vertical-align: middle;"  data-hide="phone,tablet;">设备类型</th>                                                                                                                       
 		                                                 <th style="vertical-align: middle;"  data-hide="phone,tablet;">前距</th>                                                                                                                       
@@ -183,7 +183,7 @@
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">
 					<p style="overflow:hidden;width:100%;">
-						<span style="float:left;width:15%;text-align:right">任务：</span>
+						<span style="float:left;width:15%;text-align:right">标段：</span>
 						<select id="task" style="float:left;width:52%" ></select>
 					</p>
 				</li>
@@ -273,7 +273,7 @@
 				</li>
 				<li  style="min-height:25px;margin-bottom:10px">
 					<p style="overflow:hidden;width:100%;">
-						<span style="float:left;width:15%;text-align:right">任务：</span>
+						<span style="float:left;width:15%;text-align:right">标段：</span>
 						<select id="modifyTask" style="float:left;width:52%"></select>
 					</p>
 				</li>
@@ -337,6 +337,54 @@
 						保存
 					</button>
 					<button id="cancleRevise" type="button" class="btn btn-primary"  style="float:right">
+						<span class="glyphicon glyphicon-remove-circle"> </span>
+						取消
+					</button>
+				</p>
+			</div>	
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+<!-- 修改 -->
+<div id="proDiolagBind" style="z-index:100;display:none;position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);">
+	<div class="containerAdd1" style="position:relative;background:#fff;width:50%;margin:7%  25% 2% 25%;padding-bottom:1%;height:65%;overflow:auto;">
+		<div style="position: fixed;top: 0;left: 0;z-index:1000;width:50%;margin:7%  25%;background: #fff;border-bottom:1px solid #ddd;">
+            	<p style="padding:1% 0 0 2%;height:2em;width:50%;float:left;font-size:1.3em;">设备绑定任务</p>
+			<span class="glyphicon glyphicon-remove close closeRevise" style="float:right;margin:1% 1% 1% 0;cursor:pointer" id="bingX"></span>				
+		</div>
+
+		<div id="contianerDetailRevise" style="width:90%;margin:8% auto;padding-top:2em">
+			<ul>
+			<li  style="min-height:25px;margin-bottom:10px">
+					<p style="overflow:hidden;width:100%;">
+						<span style="float:left;width:15%;text-align:right">设备名称：</span>
+						<input id="bindDeviceName" style="float:left;width:52%" type="text" disabled />
+					</p>
+				</li>
+				<li  style="min-height:25px;margin-bottom:10px">
+					<p style="overflow:hidden;width:100%;">
+						<span style="float:left;width:15%;text-align:right">任务：</span>
+						<select id="bindSegment" style="float:left;width:52%;height:26px;"></select>
+					</p>
+				</li>
+			</ul>
+		
+		</div>
+		<div style="position:fixed;top: 75%;width: 48%;height:45px;left:0;z-index:1000;background: #fff;left: 25%;">
+			<div style="width:60%;margin-top:9px;margin-left: 20%;">
+				<p style="overflow:hidden;width: 60%;text-align:center;margin-left: 20%;">
+					<button id="saveBind" type="button" class="btn btn-primary"  style="float:left">
+						<span class="glyphicon glyphicon-saved"> </span>
+						保存
+					</button>
+					<button id="cancleBind" type="button" class="btn btn-primary"  style="float:right">
 						<span class="glyphicon glyphicon-remove-circle"> </span>
 						取消
 					</button>
