@@ -154,6 +154,21 @@ public class DeviceManagerDaoImpl implements DeviceManagerDao{
 		return true;
 	}
 	
-	
+	@Override
+	public String setDevDataSingle(int deviceId,String dataList) {
+		try {
+			//定位数据
+			String[] column={"taskId","deviceId","longitude","latitude","elevation","X","Y","Z",
+					"speed","satelliteTime","direction","GPSStatus","compactId","CMV","RMV","frequency",
+					 "F1","F2","F3","temperature","angle","sensor","imageAddress","serverTime"};
+			Map<String, String> param = TransData.transData(dataList,column);
+			param.put("isValid", "1");
+			String keyId = positionManagerDao.addMainData(param).toString();
+			return keyId;
+		} catch (Exception e1) {
+			logger.error(e1.getMessage());
+			return "";
+		}	
+	}
 	
 }

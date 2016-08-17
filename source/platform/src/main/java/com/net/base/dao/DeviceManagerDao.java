@@ -45,5 +45,7 @@ public interface DeviceManagerDao {
 	boolean setDevDataNew(int deviceId, String dataList);
 
 	List<Map<String, Object>> getDeviceInfoByTaskId(Map<String, Object> map);
+
+	String setDevDataSingle(int deviceId, String dataList);
 	
 }

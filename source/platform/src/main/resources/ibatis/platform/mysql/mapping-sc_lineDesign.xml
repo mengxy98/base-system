@@ -17,7 +17,7 @@
 				  t.elevation,
 				  sdc.name as lineType,
 				  t.stNum,
-				  t.createTime,
+				  DATE_FORMAT(t.createTime, '%Y-%m-%d') as createTime,
 				  (@rownum := @rownum + 1) as rownum
 				from 
 					(select @rownum := 0 from DUAL) r,

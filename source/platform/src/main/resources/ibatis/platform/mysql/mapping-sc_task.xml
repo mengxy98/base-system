@@ -5,7 +5,7 @@
 	<select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
 	   			select 
 	   			  t.id,
-				  t.createTime, 
+				  DATE_FORMAT(t.createTime,'%Y-%m-%d %H:%i:%s') as createTime,
 				  sg.sName,
 				  t.taskName,
 				  t.material,
@@ -32,7 +32,7 @@
 					t.taskName like '%$taskName$%'
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="taskId">
-					and t.id=#taskId#
+					 t.id=#taskId#
 				</isNotEmpty>
 				<isNotEmpty property="order">
 					order by $order$
@@ -60,7 +60,7 @@
 					t.taskName = #taskName#
 				</isNotEmpty>
 				<isNotEmpty prepend="and" property="taskId">
-					and t.id=#taskId#
+					 t.id=#taskId#
 				</isNotEmpty>
 				limit 1
 	</select>

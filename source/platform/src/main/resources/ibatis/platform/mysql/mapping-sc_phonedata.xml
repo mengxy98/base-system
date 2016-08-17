@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sc_phoneData">
+	 <select id="findDataList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	   select a.pid,a.ownerName,a.phoneNum,a.phoneType,b.tid,b.isAccept,c.taskName,(@rownum := @rownum + 1) as rownum
+				from 
+				(select @rownum := 0 from DUAL) r,
+				sc_phoneinfo a
+				left join sc_phonetask b on a.pid=b.pid
+				join sc_task c on b.tid=c.id
+				where 1=1
+				<isNotEmpty prepend="and" property="phoneNum">
+					a.phoneNum =#phoneNum#
+				</isNotEmpty>
+				<isNotEmpty property="order">
+					order by $order$
+				</isNotEmpty>
+				<isNotEmpty property="orderDes">
+					$orderDes$
+				</isNotEmpty>
+				<isEmpty property="order">
+					order by t.id desc
+				</isEmpty>			
+				<isNotEmpty property="start">
+					limit #start#
+					<isNotEmpty prepend="," property="size">
+						#size#
+					</isNotEmpty>
+				</isNotEmpty>
+	</select> 
+		
+	<select id="findDataListCount" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+	     select count(1)
+				from 
+				sc_phoneinfo a
+				left join sc_phonetask b on a.pid=b.pid
+				join sc_task c on b.tid=c.id
+				where 1=1
+				<isNotEmpty prepend="and" property="phoneNum">
+					a.phoneNum =#phoneNum#
+				</isNotEmpty>
+	</select>
+	
+	
+	<insert id="addData" parameterClass="java.util.Map">
+	  insert into sc_phonetask (
+	  		pid,
+  			phoneNum,
+  			ownerName,
+  			phoneType,
+  			remark
+		)
+		values
+			(
+				#pid#,
+  				#phoneNum#,
+  				#ownerName#,
+  				#phoneType#,
+  				#remark#
+			)
+		
+	</insert>
+	
+	<delete id="deleteData" parameterClass="java.lang.String">
+		delete from sc_phonetask where pid=#pid#
+	</delete>
+	
+	<update id="modefyData" parameterClass="java.util.Map">
+	 update sc_phonetask
+	 		set phoneNum=#phoneNum#,
+  			ownerName=#ownerName#,
+  			phoneType=#phoneType#,
+  			remark=#remark#
+	where  pid=#pid#
+	</update>
+</sqlMap>
+				  
+				  
+				  
+				  
+				  
+				  
+				  
+				
