@@ -30,8 +30,8 @@
 		 <property name="localPath" value="/src/main/resources"/>
 		<property name="locations">
 			<list>
-				 <value>/config/jdbc-parms.properties</value>
-				 <value>/config/memcache.properties</value>  
+				 <value>/config/netbase/jdbc-parms.properties</value>
+				 <value>/config/netbase/memcache.properties</value>  
 			</list>
 		</property>
 	</bean>
